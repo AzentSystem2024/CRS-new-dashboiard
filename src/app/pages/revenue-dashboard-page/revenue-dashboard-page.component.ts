@@ -649,7 +649,6 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
         this.EncountrTypeDatasource = response.EncounterType || [];
         this.RejectionIndexDatasource = response.RejectionIndex || [];
         this.DenailCategoryDatasource = response.DenialCategory || [];
-        this.blockDataSource = response.Block || [];
         this.insuranceDataSource = response.Insurance || [];
         this.departmentDataSource = response.Department || [];
         this.FacilityDataSource = response.Facility || [];
@@ -674,10 +673,6 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
         this.encountertypevalue = this.EncountrTypeDatasource.filter(
           (item) => item.Default === '1',
         ).map((item) => item.ID);
-        this.blockValue =
-          this.blockDataSource
-            .filter((item) => item.Default === '1')
-            .map((item) => item.ID) || '';
         this.facilityvalue = this.FacilityDataSource.filter(
           (item) => item.Default === '1',
         ).map((item) => item.ID);
@@ -706,7 +701,6 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
       dateTo: todate,
       rejectionIndex: this.rejectionIndexvalue,
       encounterType: this.encountertypeNewvalue.join(','),
-      block: this.blockNewValue.join(','),
       facility: this.facilityvalue.join(','),
       insurance: this.insuranceNewValue.join(','),
       department: this.departmentNewValue.join(','),
@@ -719,7 +713,6 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
         payloadParams.dateTo,
         payloadParams.rejectionIndex,
         payloadParams.encounterType,
-        payloadParams.block,
         payloadParams.facility,
         payloadParams.insurance,
         payloadParams.department,

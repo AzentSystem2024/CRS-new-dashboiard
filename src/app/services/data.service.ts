@@ -133,7 +133,6 @@ export class DataService {
     rejectionIndex: any,
     denialCategory: any,
     encounterType: any,
-    block: any,
     facility: any,
     insurance: any,
     department: any
@@ -147,7 +146,6 @@ export class DataService {
       RejectionIndex: rejectionIndex,
       DenialCategory: denialCategory,
       EncounterType: encounterType,
-      Block: block,
       Region: '',
       ProviderType: '',
       Facility: facility,
@@ -270,7 +268,6 @@ export class DataService {
     todate: any,
     submissionIndex: any,
     encounterType: any,
-    block: any,
     facility: any,
     insurance: any,
     department: any
@@ -283,7 +280,6 @@ export class DataService {
       DateTo: todate,
       SubmissionIndex: submissionIndex,
       EncounterType: encounterType,
-      Block: block,
       Region: '',
       ProviderType: '',
       Facility: facility,
