@@ -1,0 +1,157 @@
+.view-wrapper {
+  margin: 0px;
+  padding: 0px;
+  height: 90vh;
+  border-radius: 8px;
+  // background-color: var(--base-bg);
+}
+
+.mainDiv {
+  background-color: var(--base-bg);
+  border-radius: 8px;
+  padding: 0px;
+  margin: 0px;
+}
+.toggle-button {
+  width: 150px;
+  height: 15px;
+}
+.container {
+  width: 100%;
+  padding: 0px;
+}
+
+.graph-scroll-container {
+  max-height: auto;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+}
+
+.graphContainer {
+  padding: 5px;
+  margin: 0px;
+  border-radius: 8px;
+}
+
+.col-md-2 {
+  flex: 0 0 auto;
+  width: 13.7%;
+  padding-left: 10px;
+}
+.col-1 {
+  width: auto;
+}
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.25%;
+  padding: 0 0.5%;
+}
+
+.col-4 {
+  padding: 0 0.5%;
+}
+
+.secondRow .col-3 {
+  padding: 0 0.5%;
+  width: 320px;
+}
+
+.col-3 {
+  padding: 0 0.5%;
+}
+.col-12 {
+  padding: 0 0.5%;
+}
+.ChartContent {
+  flex: 1;
+  padding-bottom: 10px;
+  overflow: hidden;
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  text-align: center;
+  margin: 0px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--base-bg);
+  border: 1px solid var(--border-color);
+}
+
+.iconBackground {
+  background-color: rgba(245, 222, 179, 0.413);
+  opacity: 100;
+  border-radius: 50%;
+  color: white;
+}
+.card-title {
+  font-weight: 500;
+  margin-right: 5px;
+}
+.card-text {
+  font-weight: bold;
+  font-size: large;
+}
+.card-body {
+  color: azure;
+  padding: 5px;
+}
+.percentage {
+  padding: 2px;
+  width: 50px;
+  border-radius: 15px;
+  background-color: rgba(245, 245, 220, 0.333);
+}
+.iconBackground {
+  padding: 10px;
+}
+.claimedCard {
+  background-color: #4d68ddef;
+}
+.RemittedCard {
+  background-color: #f0d43a;
+}
+.paidCard {
+  background-color: #14e34be6;
+}
+.deniedCard {
+  background-color: #ff5959;
+}
+.balanceCard {
+  background-color: #e19977e6;
+}
+.rejectionPrcntCard {
+  background-color: #99305a;
+}
+.graphTitle {
+  font-size: large;
+  font-style: italic;
+}
+.datagridContent {
+  width: 50%;
+}
+.row.ms-1.me-1 {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+::ng-deep .dx-datagrid .dx-row > td {
+  /* padding: 14px 16px; */
+  font-size: 13px;
+  line-height: 5px;
+}
+
+::ng-deep .tagbox-search-button {
+  position: absolute;
+  top: 57%;
+  right: 3px;
+  transform: translateY(-50%);
+  height: 28px;
+  width: 28px;
+  padding: 0;
+  z-index: 10;
+}

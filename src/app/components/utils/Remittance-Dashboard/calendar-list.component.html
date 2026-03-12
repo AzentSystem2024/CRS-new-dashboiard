@@ -1,0 +1,355 @@
+<!-- main card => 100vh scrollable start -->
+
+<div class=" dx-card dx-scroll-card">
+  <div *ngIf="!isLoggedIn2" class="d-flex align-items-center pe-5">
+    <dx-button
+      class="ms-auto me-1"
+      icon="export"
+      text="Export"
+      type="default"
+      [width]="'auto'"
+      [visible]="vibleExportBtn"
+      (onClick)="export()"
+    >
+    </dx-button>
+  </div>
+
+  <div class="parentDiv">
+    <div class="dx-card dx-scroll-card cardtitle">
+      <div class="dx-fieldset-header FieldHeader">Remittance Summary</div>
+
+      <!-- 1st row =>  start -->
+      <div class="grid-container">
+        <!-- Left panel content start-->
+        <div class="left-panel">
+          <div class="form formcenter" *ngIf="isLoggedIn2">
+            <div class="indicators">
+              <dx-load-indicator
+                id="large-indicator"
+                height="60"
+                width="60"
+              ></dx-load-indicator>
+            </div>
+          </div>
+
+      <!-- 1st content------start -->
+      <div class=" details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart
+          id="chart"
+          title="Receiver-Wise"
+          [dataSource]="dataSource"
+          palette="soft"
+          (onPointClick)="onPointClick($event)"
+        >
+          <dxo-size [height]="300" > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Receiver"
+            color="#cdb4db"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="ReceiverID"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipReceiver"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 1st content------end -->
+    </div>
+    <!-- Left panel content end-->
+
+    <!-- Right panel content start-->
+    <div class="right-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 2nd content------start -->
+      <div class="details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart1
+          id="chart1"
+          title="Clinician-Wise"
+          [dataSource]="dataSource1"
+          palette="soft"
+          (onPointClick)="onPointClick_Second_Graph($event)"
+        >
+          <dxo-size [height]="300" > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Clinician"
+            color="#ffc8dd"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="Clinician"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipClinician"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 2nd content------end -->
+    </div>
+    <!-- Right panel content end -->
+  </div>
+  <!-- 1st row =>  end-->
+</div>
+<div class="dx-card dx-scroll-card cardtitle">
+  <div class="dx-fieldset-header FieldHeader">Payment Summary</div>
+  <!-- 2nd row =>  start -->
+  <div class="grid-container">
+    <!-- Left panel content start-->
+    <div class="left-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 3rd content------start -->
+      <div class=" details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart2
+          id="chart2"
+          title="Receiver-Wise"
+          [dataSource]="dataSource2"
+          palette="soft"
+          (onPointClick)="onPointClick($event)"
+        >
+          <dxo-size [height]="300"  > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Receiver"
+            color="#ffafcc"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="ReceiverID"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipReceiver"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!--3rd content------end -->
+    </div>
+    <!-- Left panel content end-->
+
+    <!-- Right panel content start-->
+    <div class="right-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 4th content------start -->
+      <div class="dx-card details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart3
+          id="chart3"
+          title="Clinician-Wise"
+          [dataSource]="dataSource3"
+          (onPointClick)="onPointClick_Second_Graph($event)"
+        >
+          <dxo-size [height]="300" > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Clinician"
+            color="#bde0fe"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="Clinician"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipClinician"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 4th content------end -->
+    </div>
+    <!-- Right panel content end -->
+  </div>
+  <!-- 2ndrow =>  end-->
+</div>
+<div class="dx-card dx-scroll-card cardtitle">
+  <div class="dx-fieldset-header FieldHeader">Rejection Summary</div>
+  <!-- 3rd row =>  start -->
+  <div class="grid-container">
+    <!-- Left panel content start-->
+    <div class="left-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 5th content------start -->
+      <div class="details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart4
+          id="chart4"
+          title="Receiver-Wise"
+          [dataSource]="dataSource4"
+          palette="soft"
+          (onPointClick)="onPointClick($event)"
+        >
+          <dxo-size [height]="300" > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Receiver"
+            color="#a2d2ff"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="ReceiverID"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipReceiver"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 5th content------end -->
+    </div>
+    <!-- Left panel content end-->
+
+    <!-- Right panel content start-->
+    <div class="right-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 6th content------start -->
+      <div class=" details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart #chart5
+          id="chart5"
+          title="Clinician-Wise"
+          [dataSource]="dataSource5"
+          palette="soft"
+          (onPointClick)="onPointClick_Second_Graph($event)"
+        >
+          <dxo-size [height]="300" > </dxo-size>
+          <dxi-series
+            valueField="Amount"
+            name="Clinician"
+            color="#bdb2ff"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="Clinician"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltipClinician"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 6th content------end -->
+    </div>
+    <!-- Right panel content end -->
+  </div>
+  <!-- 3rd row =>  end-->
+</div>
+<!-- main card => 100vh scrollable end -->

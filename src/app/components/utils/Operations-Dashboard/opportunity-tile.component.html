@@ -1,0 +1,116 @@
+<!-- main card => 100vh scrollable start -->
+<div class="dx-card dx-scroll-card cardtitle">
+  <div *ngIf="!isLoggedIn2" class="d-flex align-items-center pe-5">
+    <dx-button
+      class="ms-auto me-1"
+      icon="export"
+      text="Export"
+      type="default"
+      [width]="'auto'"
+      [visible]="vibleExportBtn"
+      (onClick)="export()"
+    >
+    </dx-button>
+  </div>
+  <!-- <div class="dx-fieldset-header FieldHeader">Claim Analysis</div> -->
+
+  <!-- 1st row =>  start -->
+  <div class="parentDiv grid-container">
+    <div class="dx-fieldset-header FieldHeader">Claim Analysis</div>
+    <!-- Left panel content start-->
+    <div class="left-panel">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 1st content------start -->
+      <div class="details-card" *ngIf="!isLoggedIn2">
+        <dx-chart
+          id="chart"
+          title=""
+          [dataSource]="dataSource"
+          palette="soft"
+          (onPointClick)="onPointClick($event)"
+        >
+          <dxi-series
+            *ngFor="let series of chartSeries"
+            [valueField]="series.valueField"
+            [color]="series.color"
+            [name]="series.name"
+            argumentField="Submission"
+          >
+          </dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings type="bar" [barPadding]="0.5">
+          </dxo-common-series-settings>
+          <dxo-legend verticalAlignment="top" horizontalAlignment="right">
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltip"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 1st content------end -->
+    </div>
+    <!-- Left panel content end-->
+
+    <!-- Right panel content start-->
+    <div class="dx-card dx-scroll-card cardtitle">
+      <div class="dx-fieldset-header FieldHeader">Top 10 Denials</div>
+      <div class="right-panel formcenter">
+        <div class="form formcenter" *ngIf="isLoggedIn2">
+          <div class="indicators">
+            <dx-load-indicator
+              id="large-indicator"
+              height="60"
+              width="60"
+            ></dx-load-indicator>
+          </div>
+        </div>
+
+        <!-- 2nd content------start -->
+        <div class="" *ngIf="!isLoggedIn2">
+          <dx-pie-chart
+            id="pieChart"
+            class="pie"
+            [title]=""
+            [palette]="Pie_Chart_palette"
+            [dataSource]="PiedataSource"
+            sizeGroup="piesGroup"
+            (onPointClick)="onPointClick1($event)"
+            [size]="{ width: 600, height: 600 }"
+          >
+            <dxi-series argumentField="DenialCode" valueField="Amount">
+              <dxo-label [visible]="true" [customizeText]="customizeLabelText" position="columns" [indent]="30">
+                <dxo-font [size]="12"></dxo-font>
+                <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+              </dxo-label>
+            </dxi-series>
+            <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+            </dxo-legend>
+            <dxo-tooltip
+              [enabled]="true"
+              [customizeTooltip]="customizePieTooltip"
+            ></dxo-tooltip>
+            <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          </dx-pie-chart>
+        </div>
+
+        <!-- 2nd content------end -->
+      </div>
+      <!-- Right panel content end -->
+    </div>
+  </div>
+  <!-- 1st row =>  end-->
+</div>

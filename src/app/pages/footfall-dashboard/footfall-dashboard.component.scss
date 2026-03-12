@@ -1,0 +1,136 @@
+.view-wrapper {
+  margin: 0px;
+  padding: 0px;
+  height: 90vh;
+  border-radius: 8px;
+}
+
+.mainDiv {
+  background-color: var(--base-bg);
+  border-radius: 8px;
+  padding: 0px;
+  margin: 0px;
+}
+.toggle-button {
+  width: 150px;
+  height: 15px;
+}
+.container {
+  width: 100%;
+  padding: 0px;
+}
+
+.graph-scroll-container {
+  max-height: auto;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+}
+
+.graphContainer {
+  padding: 5px;
+  margin: 0px;
+  border-radius: 8px;
+}
+.col-md-2 {
+  flex: 0 0 auto;
+  width: 13.7%;
+  padding-left: 10px;
+}
+.col-1 {
+  padding: 0 0.5%;
+  width: auto;
+}
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66666667%;
+  padding: 0 0.5%;
+  // padding: 0 5px;
+}
+.col-4 {
+  padding: 0 0.5%;
+}
+.col-3 {
+  padding: 0 0.5%;
+}
+.col-12 {
+  padding: 0 0.5%;
+}
+.ChartContent {
+  flex: 1;
+  padding-bottom: 10px;
+  overflow: hidden;
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  text-align: center;
+  margin: 0px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--base-bg);
+  border: 1px solid var(--border-color);
+}
+.graphTitle {
+  font-size: large;
+  font-style: italic;
+}
+.datagridContent {
+  width: 50%;
+}
+
+.row.mt-1.ms-1.me-1 {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.row.ms-1.me-1 {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+::ng-deep .dx-datagrid .dx-row > td {
+  /* padding: 14px 16px; */
+  font-size: 13px;
+  line-height: 5px;
+}
+::ng-deep .tagbox-search-button {
+  position: absolute;
+  top: 57%;
+  right: 3px;
+  transform: translateY(-50%);
+  height: 28px;
+  width: 28px;
+  padding: 0;
+  z-index: 10;
+}
+
+.color-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.color-box {
+  width: 12px;
+  height: 12px;
+  // border-radius: 4px;
+  margin-right: 6px;
+  // border: 1px solid #ccc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}

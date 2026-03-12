@@ -1,0 +1,78 @@
+<!-- ------------Claimed -------------------------->
+<!-- main card => 100vh scrollable start -->
+<div class=" dx-card dx-scroll-card cardtitle">
+  <div class="header-container">
+    <dx-button
+      class="ms-3"
+      icon="back"
+      text="Back"
+      (onClick)="BackToPreviousPage()"
+    >
+    </dx-button>
+    <div class="dx-fieldset-header FieldHeader">
+      {{ submissionLevel }} - {{ selectedSeriesName }}
+    </div>
+    <div *ngIf="!isLoggedIn2" class="me-4">
+      <dx-button
+        icon="export"
+        text="Export"
+        type="default"
+        [width]="'auto'"
+        [visible]="vibleExportBtn"
+        (onClick)="export()"
+      >
+      </dx-button>
+    </div>
+  </div>
+  <!-- 1st row =>  start -->
+  <div class="parentDiv grid-container">
+    <!-- Left panel content start-->
+    <div class="left-panel ">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 1st content------start -->
+      <div class="dx-card details-card details-card1" *ngIf="!isLoggedIn2">
+        <dx-chart id="chart" title="" [dataSource]="dataSource" palette="soft">
+          <dxi-series
+            valueField="Amount"
+            name="Receiver"
+            color="#9bf6ff"
+          ></dxi-series>
+          <dxi-value-axis position="left">
+            <dxo-title text="Amount"></dxo-title>
+          </dxi-value-axis>
+          <dxo-common-series-settings
+            argumentField="ReceiverID"
+            type="stackedBar"
+          >
+          </dxo-common-series-settings>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="top"
+          >
+          </dxo-legend>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+          <dxo-tooltip
+            [enabled]="true"
+            location="edge"
+            [customizeTooltip]="customizeTooltip"
+          >
+          </dxo-tooltip>
+        </dx-chart>
+      </div>
+      <!-- 1st content------end -->
+    </div>
+    <!-- Left panel content end-->
+  </div>
+  <!-- 1st row =>  end-->
+</div>
+<!-- main card => 100vh scrollable end -->
+<!-- ------------Claimed -------------------------->

@@ -1,0 +1,83 @@
+.grid-container {
+  display: flex;
+  height: 100%; /* Adjust height as needed */
+}
+.dx-drawer-content {
+  overflow: hidden;
+  width: 100%;
+  height: 100vh !important;
+  top: 0;
+}
+
+.left-panel {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.right-panel {
+  flex: 1;
+  /* Adjust padding as needed */
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#grid {
+  width: 100%;
+  height: 100%;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.cell-color-1 {
+  background-color: #ff5733; /* Example color 1 */
+}
+
+/* Define the styles for the scroll bar track */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Define the style of the scroll bar handle */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
+/* Define the style of the scroll bar track */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Define the style of the scroll bar handle when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.m-0 {
+  margin: 0px;
+  margin-top: 10px;
+}
+.p-0 {
+  padding: 0px;
+}
+
+::ng-deep .indicators {
+  display: flex;
+  align-items: center;
+}
+
+.formcenter {
+  position: relative;
+  height: 70vh;
+  // display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::ng-deep .controls-pane {
+  float: right;
+  padding: 10px;
+  margin-top: -25px;
+}

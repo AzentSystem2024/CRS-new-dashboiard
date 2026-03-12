@@ -1,0 +1,124 @@
+<!-- main card => 100vh scrollable start -->
+<div class="dx-card dx-scroll-card cardtitle">
+  <div class="header-container">
+    <dx-button
+      class="ms-3"
+      icon="back"
+      text="Back"
+      (onClick)="BackToPreviousPage()"
+    >
+    </dx-button>
+    <div class="dx-fieldset-header FieldHeader">CPT Wise Paid vs Denied</div>
+    <div *ngIf="!isLoggedIn2" class="me-4">
+      <dx-button
+        icon="export"
+        text="Export"
+        type="default"
+        [width]="'auto'"
+        [visible]="vibleExportBtn"
+        (onClick)="export()"
+      >
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- 1st row =>  start -->
+  <div class="parentDiv grid-container">
+    <!-- Left panel content start-->
+
+    <div class="left-panel formcenter">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+      <!-- 1st content------start -->
+      <div class="pies-container" *ngIf="!isLoggedIn2">
+        <dx-pie-chart
+          class="pie"
+          title="TOP 10 PAID CPT"
+          [palette]="right_palette"
+          [dataSource]="dataSource1"
+          sizeGroup="piesGroup"
+          [size]="{ width: 500, height: 500 }"
+        >
+          <dxi-series argumentField="CPTCode" valueField="Amount">
+            <dxo-label [visible]="true" [customizeText]="customizeLabelText"  position="columns">
+              <dxo-font [size]="12"></dxo-font>
+              <dxo-connector [visible]="true" [width]="2"></dxo-connector>
+            </dxo-label>
+          </dxi-series>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="right"
+            [rowCount]="2"
+          >
+          </dxo-legend>
+          <dxo-tooltip
+            [enabled]="true"
+
+            [customizeTooltip]="customizePieTooltip"
+          ></dxo-tooltip>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+        </dx-pie-chart>
+      </div>
+
+      <!-- 1st content------end -->
+    </div>
+    <!-- Left panel content end-->
+
+    <!-- Right panel content start-->
+
+    <div class="right-panel formcenter">
+      <div class="form formcenter" *ngIf="isLoggedIn2">
+        <div class="indicators">
+          <dx-load-indicator
+            id="large-indicator"
+            height="60"
+            width="60"
+          ></dx-load-indicator>
+        </div>
+      </div>
+
+      <!-- 2nd content------start -->
+      <div class="pies-container" *ngIf="!isLoggedIn2">
+        <dx-pie-chart
+          class="pie"
+          title="TOP 10 DENIED CPT"
+          [palette]="left_palette"
+          [dataSource]="dataSource"
+          sizeGroup="piesGroup"
+          [size]="{ width: 500, height: 500 }"
+        >
+          <dxi-series argumentField="CPTCode" valueField="Amount">
+            <dxo-label [visible]="true" [customizeText]="customizeLabelText" position="columns">
+              <dxo-font [size]="12"></dxo-font>
+              <dxo-connector [visible]="true" [width]="2"></dxo-connector>
+            </dxo-label>
+          </dxi-series>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="right"
+            [rowCount]="2"
+          >
+          </dxo-legend>
+          <dxo-tooltip
+            [enabled]="true"
+            [customizeTooltip]="customizePieTooltip"
+          ></dxo-tooltip>
+          <!-- <dxo-export [enabled]="true"></dxo-export> -->
+        </dx-pie-chart>
+      </div>
+
+      <!-- 2nd content------end -->
+    </div>
+    <!-- Right panel content end -->
+  </div>
+  <!-- 1st row =>  end-->
+</div>

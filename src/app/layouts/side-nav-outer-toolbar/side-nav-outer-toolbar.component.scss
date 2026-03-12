@@ -1,0 +1,90 @@
+@use "../../../variables.scss" as *;
+
+
+:host {
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.layout-body {
+  flex: 1;
+  background-color: var(--background-color);
+  // padding: 10px;
+  margin: 0px;
+}
+
+.content {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  margin: 30px;
+  padding-bottom: 25Px;
+  background-color: var(--typography-bg);
+}
+
+.view-wrapper {
+  padding: 0px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+.toolbar-container {
+  flex: 1;
+  overflow: hidden;
+  transition: all 0.5s;
+  white-space: nowrap;
+}
+
+
+
+.cards {
+  display: grid;
+  width: 100%;
+  gap: 15px;
+  grid-template-columns: repeat(1, calc(50% - 10px));
+
+  &.grey {
+    margin: 10px 0;
+    grid-template-columns: repeat(10, calc(100% - 5px));
+
+    ::ng-deep .card {
+      background-color: var(--side-panel-background);
+      border: none;
+      height: 120px;
+
+      ::ng-deep {
+        .dx-button {
+          background-color: var(--side-panel-background);
+        }
+      }
+    }
+
+    ::ng-deep .dx-loadpanel-indicator {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.tabDataDiv{
+  padding: 5px;
+  border-radius: 5px;
+}

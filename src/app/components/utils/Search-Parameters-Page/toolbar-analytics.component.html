@@ -1,0 +1,154 @@
+<dx-form id="form" class="mainDiv m-2 mb-2 p-0">
+  <dxi-item itemType="group" [colCount]="9">
+    <dxi-item itemType="group" [colSpan]="2">
+      <dxi-item>
+        <div class="">Search On :</div>
+        <div>
+          <dx-select-box
+            [dataSource]="SearchOnDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="searchOnvalue"
+            placeholder="Select value"
+            required
+          >
+          </dx-select-box>
+        </div>
+      </dxi-item>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colSpan]="7">
+      <dxi-item>
+        <div class="">Facility :</div>
+        <div class="">
+          <dx-drop-down-box
+            [(value)]="facilityvalue"
+            valueExpr="ID"
+            displayExpr="Name"
+            [showClearButton]="true"
+            [dataSource]="FacilityDataSource"
+            (onValueChanged)="onDropDownBoxValueChanged()"
+          >
+            <div>
+              <dx-tree-view
+                [dataSource]="FacilityDataSource"
+                keyExpr="ID"
+                dataStructure="plain"
+                selectionMode="multiple"
+                showCheckBoxesMode="normal"
+                [selectNodesRecursive]="false"
+                displayExpr="Name"
+                [selectByClick]="true"
+                (onContentReady)="onTreeViewReady($event)"
+                (onItemSelectionChanged)="onTreeViewSelectionChanged($event)"
+              >
+              </dx-tree-view>
+            </div>
+          </dx-drop-down-box>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+
+  <dxi-item itemType="group" [colCount]="7">
+    <dxi-item itemType="group" [colSpan]="1">
+      <dxi-item>
+        <div class="">Encounter Type :</div>
+        <div>
+          <dx-select-box
+            [dataSource]="EncountrTypeDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="encountertypevalue"
+            placeholder="Select value"
+            required
+          >
+          </dx-select-box>
+        </div>
+      </dxi-item>
+    </dxi-item>
+
+    <dxi-item [colSpan]="1">
+      <div class="">Year</div>
+      <dx-select-box
+        [(value)]="selectedYear"
+        [dataSource]="years"
+        (onItemClick)="onYearChanged($event)"
+        placeholder="Year"
+      ></dx-select-box>
+    </dxi-item>
+
+    <dxi-item [colSpan]="1">
+      <div class="">Month</div>
+      <div>
+        <dx-select-box
+          [dataSource]="monthDataSource"
+          displayExpr="name"
+          valueExpr="value"
+          [(value)]="selectedmonth"
+          placeholder="Month"
+          required
+          (onItemClick)="onMonthValueChanged($event)"
+          [dropDownOptions]="{ width: 'auto' }"
+        >
+        </dx-select-box>
+      </div>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colSpan]="1">
+      <dxi-item>
+        <div class="">From Date :</div>
+        <dx-date-box
+          applyValueMode="useButtons"
+          [(value)]="DateFrom"
+          [min]="min"
+          [max]="now"
+          displayFormat="dd/MM/yyyy"
+        >
+        </dx-date-box>
+      </dxi-item>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colSpan]="1">
+      <dxi-item>
+        <div class="">To Date :</div>
+        <dx-date-box
+          applyValueMode="useButtons"
+          [(value)]="DateTo"
+          [min]="mind"
+          [max]="nowa"
+          displayFormat="dd/MM/yyyy"
+        >
+        </dx-date-box>
+      </dxi-item>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colSpan]="1">
+      <dxi-item *ngIf="isFinanceHomeLoaded">
+        <div class="">AsOnDate :</div>
+        <dx-date-box
+          applyValueMode="useButtons"
+          [(value)]="AsOnDate"
+          [min]="mind"
+          [max]="nowa"
+          displayFormat="dd/MM/yyyy"
+        >
+        </dx-date-box>
+      </dxi-item>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colSpan]="1">
+      <dxi-item class="ms-3 mt-3">
+        <dx-button
+          class="add-card"
+          icon="todo"
+          text="Apply"
+          type="default"
+          stylingMode="contained"
+          (click)="applyButtonClicked()"
+        >
+        </dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+</dx-form>

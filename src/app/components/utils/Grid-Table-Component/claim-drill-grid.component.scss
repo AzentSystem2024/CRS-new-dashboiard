@@ -1,0 +1,35 @@
+// @use "../../../../styles.scss" as *;
+@use "sass:math";
+
+.view-wrapper.list-page {
+  height: 100vh;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 10px;
+  bottom: 0px;
+  left: 5px;
+  right: 5px;
+  padding: 5px;
+}
+.grid {
+  height: 100%;
+  overflow-y: auto;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+.horizontal-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.toolbarDiv {
+  margin-bottom: 2px;
+}
+.dx-theme-fluent .view-wrapper.list-page .grid.theme-dependent .dx-toolbar {
+  margin-bottom: 0px;
+}
+.formcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

@@ -1,0 +1,50 @@
+// .col-lg-3 {
+//     width: 20%;
+//     margin-top: 10px;
+//     border-radius: 2px;
+//    ;
+//   }
+  .auto-width {
+    width: auto;
+  }
+  .overflow-auto::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  
+  .overflow-auto::-webkit-scrollbar-thumb {
+    background-color: #1816168e;
+  }
+  
+  .overflow-auto::-webkit-scrollbar {
+    width: 10px;
+    height: 6px;
+    margin: 3px;
+  }
+  
+  
+  .overflow-auto::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+  }
+ 
+  @media(min-width:769px){
+    .card-main {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+  
+  .card-main > div{
+      // width: 19% !important;
+      padding: 0 !important;
+  }
+  }
+
+  ticker-card{
+    background-color: aquamarine;
+  }
+
+
+  .col-lg-2{
+    width: 19%;
+    margin-left: 4px;
+  }

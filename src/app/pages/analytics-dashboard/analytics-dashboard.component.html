@@ -1,0 +1,15 @@
+<dx-scroll-view class="view-wrapper-scroll">
+  <div class="view-wrapper">
+    <div class="cards">
+      <conversion-card></conversion-card>
+    </div>
+  </div>
+</dx-scroll-view>
+
+<dx-load-panel
+  container=".view-wrapper"
+  [position]="{ of: '.content' }"
+  [showPane]="true"
+>
+</dx-load-panel>
+

@@ -1,0 +1,70 @@
+<!-- main card => 100vh scrollable start -->
+<div class="dx-card dx-scroll-card cardtitle">
+  <div class="d-flex align-items-center mb-3">
+    <div *ngIf="!isLoggedIn1" class="ms-auto me-5">
+      <dx-button
+        icon="export"
+        text="Export"
+        type="default"
+        [width]="'auto'"
+        [visible]="vibleExportBtn"
+        (onClick)="export()"
+      >
+      </dx-button>
+      <!-- <dx-drop-down-button
+      text="export"
+      [dropDownOptions]="{ width: 'auto' }"
+      icon="export"
+      stylingMode="contained"
+      [items]="['PRINT','PNG', 'JPEG', 'PDF']"
+      (onItemClick)="export($event)"
+    ></dx-drop-down-button> -->
+    </div>
+  </div>
+  <div class="dx-fieldset-header FieldHeader">Claim Summary</div>
+  <div class="ExportDiv left-panel">
+    <div class="form formcenter" *ngIf="isLoggedIn1">
+      <div class="indicators">
+        <dx-load-indicator
+          id="large-indicator"
+          height="60"
+          width="60"
+        ></dx-load-indicator>
+      </div>
+    </div>
+    <!-- 1st content------start -->
+    <div
+      class="dx-card details-card p-4 mt-4"
+      *ngIf="!isLoggedIn1"
+      style="width: 100%"
+    >
+      <dx-funnel
+        id="funnel"
+        [dataSource]="processedData"
+        argumentField="head"
+        valueField="data"
+        colorField="color"
+        (onItemClick)="onItemClick($event)"
+      >
+        <!-- <dxo-export [enabled]="true"></dxo-export> -->
+        <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+        </dxo-tooltip>
+        <dxo-item>
+          <dxo-border [visible]="true"> </dxo-border>
+        </dxo-item>
+        <dxo-label
+          [visible]="true"
+          position="inside"
+          backgroundColor="none"
+          [customizeText]="customizeOppText"
+        >
+          <dxo-format type="largeNumber" [precision]="1"> </dxo-format>
+        </dxo-label>
+        <dxo-legend [visible]="true">
+          <dxo-margin [top]="20"></dxo-margin>
+        </dxo-legend>
+        <dxo-size [height]="500"></dxo-size>
+      </dx-funnel>
+    </div>
+  </div>
+</div>

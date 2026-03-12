@@ -1,0 +1,33 @@
+<app-header
+  class="layout-header"
+  [title]="appInfo.title"
+  [menuToggleEnabled]="true"
+  (menuToggle)="menuOpened = !menuOpened"
+></app-header>
+
+<div class="layout-body">
+  <dx-tabs
+    #withText
+    noDataText=" "
+    [width]="'auto'"
+    [selectedIndex]="selectedIndex"
+    [rtlEnabled]="false"
+    [scrollByContent]="false"
+    [showNavButtons]="false"
+    [dataSource]="tabs"
+    [orientation]="orientation"
+    stylingMode="primary"
+    iconPosition="start"
+    (onItemClick)="onTabChanged($event)"
+  >
+    ></dx-tabs
+  >
+
+  <div class="mt-1">
+    <router-outlet *ngIf="tabdataavailable"> </router-outlet>
+
+    <app-empty-dashboard-message
+      *ngIf="!tabdataavailable"
+    ></app-empty-dashboard-message>
+  </div>
+</div>

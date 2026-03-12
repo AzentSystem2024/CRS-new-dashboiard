@@ -1,0 +1,90 @@
+@use "../../../../variables.scss" as *;
+@use "sass:math";
+
+// .parentDiv {
+//   width: 100%;
+// }
+
+.FieldHeader {
+  width: 100%;
+}
+
+.m-0 {
+  margin: 0px;
+  // margin-top: 10px;
+}
+.p-0 {
+  padding: 0px;
+}
+
+.grid-container {
+  display: flex;
+  height: 45vh;
+}
+
+.left-panel {
+  flex: 1;
+}
+
+.right-panel {
+  flex: 1;
+}
+
+#grid {
+  width: 100%;
+  height: 100%;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.cell-color-1 {
+  background-color: #ff5733;
+}
+
+.details-card dx-chart {
+  // min-width: 45%;
+  padding: 20px 0px;
+}
+
+/* Define the styles for the scroll bar track */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Define the style of the scroll bar handle */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
+/* Define the style of the scroll bar track */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Define the style of the scroll bar handle when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.formcenter {
+  position: relative;
+  height: 59vh; /* Use the viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .controls-pane {
+  float: right;
+  padding: 10px;
+  margin-top: -25px;
+}
+.dx-card.dx-scroll-card {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* padding-bottom: 30px; */
+}

@@ -1,0 +1,516 @@
+<div class="view-wrapper pb-2 pt-1">
+  <div class="ExportDiv1">
+    <div class="mainDiv mb-1 p-0">
+      <!-- Top Filter Row -->
+      <div class="d-flex flex-wrap align-items-center gap-3 px-2 py-1">
+        <!-- Facility -->
+        <div class="flex-item" style="width: 450px">
+          <dx-drop-down-box
+            class="dropdowncontent"
+            labelMode="floating"
+            labelLocation="left"
+            label="Facility"
+            [(value)]="facilityvalue"
+            valueExpr="ID"
+            displayExpr="Name"
+            [showClearButton]="true"
+            [dataSource]="modifiedFacilityDatasource"
+            [dropDownOptions]="{
+              width: 'auto',
+              height: '47vh',
+              position: {
+                my: 'left top',
+                at: 'left bottom',
+                of: '.dropdowncontent',
+                collision: 'fit flip'
+              }
+            }"
+          >
+            <div class="p-0" *dxTemplate="let data of 'content'">
+              <dx-data-grid
+                [dataSource]="modifiedFacilityDatasource"
+                [columns]="[
+                  { dataField: 'ID', caption: 'Facility ID', width: 'auto' },
+                  {
+                    dataField: 'ShortName',
+                    caption: 'Short Name',
+                    width: '200'
+                  },
+                  { dataField: 'Name', caption: 'FacilityName', width: '200' },
+                  { dataField: 'Region', caption: 'Region', width: 'auto' },
+                  {
+                    dataField: 'ProviderType',
+                    caption: 'Provider Type',
+                    width: 'auto'
+                  }
+                ]"
+                [selection]="{ mode: 'multiple' }"
+                [hoverStateEnabled]="true"
+                [paging]="{ enabled: true, pageSize: 10 }"
+                [filterRow]="{ visible: true }"
+                [headerFilter]="{ visible: true }"
+                [scrolling]="{ mode: 'virtual' }"
+                [(selectedRowKeys)]="facilityvalue"
+                (onSelectionChanged)="
+                  onSelectionChanged(
+                    $event,
+                    this.FacilityDataSource,
+                    'modifiedFacilityDatasource'
+                  )
+                "
+                [width]="'100%'"
+                [height]="'100%'"
+              >
+              </dx-data-grid>
+            </div>
+          </dx-drop-down-box>
+        </div>
+
+        <!-- Department -->
+        <div class="flex-item" style="width: 220px">
+          <dx-tag-box
+            [searchEnabled]="true"
+            [dropDownOptions]="{ height: 250 }"
+            [items]="DepartmentDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="DepartmentValue"
+            label="Department"
+            labelMode="floating"
+            [showSelectionControls]="true"
+            (onMultiTagPreparing)="onMultiTagDepartmentPreparing($event)"
+            selectAllMode="allPages"
+            [maxDisplayedTags]="0"
+            [multiline]="false"
+            [showClearButton]="true"
+            applyValueMode="instantly"
+          ></dx-tag-box>
+        </div>
+
+        <!-- From Date -->
+        <div class="flex-item" style="width: 180px">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              dataField="fromdate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd'
+              }"
+            >
+              <dxo-label text="From Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <!-- To Date -->
+        <div class="flex-item" style="width: 180px">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              dataField="todate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd'
+              }"
+            >
+              <dxo-label text="To Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <!-- Export Button -->
+        <div class="ms-auto">
+          <dx-button
+            class="add-card me-2"
+            icon="refresh"
+            text="Apply"
+            type="success"
+            stylingMode="contained"
+            (click)="applyButtonClicked(); $event.stopPropagation()"
+          ></dx-button>
+          <dx-drop-down-button
+            text="Export"
+            icon="export"
+            [width]="'auto'"
+            [visible]="vibleExportBtn"
+            [items]="exportOptions"
+            keyExpr="id"
+            displayExpr="text"
+            [elementAttr]="{ class: 'export-button' }"
+          >
+          </dx-drop-down-button>
+        </div>
+      </div>
+
+      <!-- <div class="text-center mt-1">
+        <dx-button
+          class="toggle-button"
+          [icon]="showGroups ? 'chevronup' : 'chevrondown'"
+          stylingMode="outlined"
+          type="default"
+          (click)="toggleGroups()"
+        ></dx-button>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="graph-scroll-container">
+    <div class="">
+      <div class="graphContainer ExportDiv2">
+        <div class="d-flex gap-1">
+          <div class="ChartContent">
+            <dx-chart
+              id="chart"
+              [size]="chartSize"
+              [dataSource]="DailyFootfallChartDataSource"
+              (onInitialized)="onChartInitialized($event)"
+            >
+              <!-- Title -->
+              <dxo-title
+                text="Daily Footfall by Insurance Type"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial'
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+
+              <!-- Common Series Settings -->
+              <dxo-common-series-settings
+                argumentField="WeekName"
+                type="stackedBar"
+              >
+                <dxo-label
+                  [visible]="true"
+                  position="inside"
+                  [backgroundColor]="'transparent'"
+                  [font]="{ color: '#fff', weight: 500, size: 13 }"
+                  [customizeText]="customizePercentageLabel"
+                ></dxo-label>
+              </dxo-common-series-settings>
+
+              <!-- Thiqa -->
+              <dxi-series
+                valueField="FootFallThiqua"
+                name="Thiqa"
+                color="#007acc"
+              ></dxi-series>
+
+              <!-- Non-Thiqa -->
+              <dxi-series
+                valueField="FootFallNonThiqua"
+                name="Non-Thiqa"
+                color="#ff8c00"
+              ></dxi-series>
+
+              <!-- Legend -->
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+
+              <!-- Tooltip -->
+              <dxo-tooltip
+                [enabled]="true"
+                [shared]="false"
+                [customizeTooltip]="barChartcustomizeTooltip"
+              ></dxo-tooltip>
+
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv3">
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <dx-chart
+              id="hourlyChart"
+              [size]="chartSize"
+              [dataSource]="HourlyDistributionChartDataSource"
+              (onInitialized)="onChartInitialized($event)"
+            >
+              <!-- Title -->
+              <dxo-title
+                text="Hourly Distribution by Insurance Type"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial'
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+
+              <!-- Common Series Settings -->
+              <dxo-common-series-settings
+                argumentField="Time"
+                type="stackedBar"
+              >
+                <dxo-label
+                  [visible]="true"
+                  position="inside"
+                  [backgroundColor]="'transparent'"
+                  [font]="{ color: '#fff', weight: 500, size: 13 }"
+                  [customizeText]="customizePercentageLabel"
+                ></dxo-label>
+              </dxo-common-series-settings>
+
+              <!-- Thiqa -->
+              <dxi-series
+                valueField="FootFallThiqua"
+                name="Thiqa"
+                color="#007acc"
+              ></dxi-series>
+
+              <!-- Non-Thiqa -->
+              <dxi-series
+                valueField="FootFallNonThiqua"
+                name="Non-Thiqa"
+                color="#ff8c00"
+              ></dxi-series>
+
+              <!-- Legend -->
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+
+              <!-- Tooltip -->
+              <dxo-tooltip
+                [enabled]="true"
+                [shared]="false"
+                [customizeTooltip]="barChartcustomizeTooltip"
+              ></dxo-tooltip>
+
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv4">
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <dx-chart
+              id="monthlyChart"
+              [size]="chartSize"
+              [dataSource]="MonthlyInsuranceChartDataSource"
+              (onInitialized)="onChartInitialized($event)"
+            >
+              <!-- Title -->
+              <dxo-title
+                text="Monthly Insurance Footfall Trends"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial'
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+
+              <!-- Common Series Settings -->
+              <dxo-common-series-settings
+                argumentField="MonthName"
+                type="stackedBar"
+              >
+                <dxo-label
+                  [visible]="true"
+                  position="inside"
+                  [backgroundColor]="'transparent'"
+                  [font]="{ color: '#fff', weight: 500, size: 13 }"
+                  [customizeText]="customizePercentageLabel"
+                ></dxo-label>
+              </dxo-common-series-settings>
+
+              <!-- Thiqa -->
+              <dxi-series
+                valueField="FootFallThiqua"
+                name="Thiqa"
+                color="#007acc"
+              ></dxi-series>
+
+              <!-- Non-Thiqa -->
+              <dxi-series
+                valueField="FootFallNonThiqua"
+                name="Non-Thiqa"
+                color="#ff8c00"
+              ></dxi-series>
+
+              <!-- Legend -->
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+
+              <!-- Tooltip -->
+              <dxo-tooltip
+                [enabled]="true"
+                [shared]="false"
+                [customizeTooltip]="barChartcustomizeTooltip"
+              ></dxo-tooltip>
+
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv5">
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <p
+              style="
+                font-size: 35;
+                font-weight: 700;
+                margin-bottom: 10px;
+                text-align: left;
+              "
+            >
+              Department-wise Thiqa Percentages Across Days
+            </p>
+            <dx-data-grid
+              [dataSource]="DepartmentWisedataSource"
+              [showBorders]="true"
+              [columnAutoWidth]="true"
+              [wordWrapEnabled]="true"
+              [rowAlternationEnabled]="false"
+              [hoverStateEnabled]="true"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [height]="'auto'"
+              (onCellPrepared)="onCellPrepared($event)"
+            >
+              <dxi-column
+                dataField="Department"
+                caption="Department"
+                [allowSorting]="false"
+                [fixed]="true"
+              ></dxi-column>
+
+              <!-- <dxi-column caption="Thiqa Percentage" alignment="center"> -->
+                <dxi-column
+                  *ngFor="
+                    let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                  "
+                  [dataField]="day"
+                  [caption]="day"
+                  [alignment]="'center'"
+                  [allowSorting]="false"
+                ></dxi-column>
+              <!-- </dxi-column> -->
+            </dx-data-grid>
+            <div class="color-legend mt-2">
+              <div class="legend-item" *ngFor="let item of colorLegend">
+                <span class="color-box" [style.backgroundColor]="item.color"></span>
+                <span class="legend-label">{{ item.label }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv6" >
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <dx-chart
+              id="clinicianChart"
+              [size]="chartSize"
+              [dataSource]="ClinicianwiseChartDataSource"
+              (onInitialized)="onChartInitialized($event)"
+            >
+              <!-- Title -->
+              <dxo-title
+                text="Clinician-wise Thiqa Patient Engagement"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial'
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+
+              <!-- Common Series Settings -->
+              <dxo-common-series-settings argumentField="Clinician" type="bar">
+                <dxo-label
+                  [visible]="true"
+                  position="inside"
+                  [backgroundColor]="'transparent'"
+                  [font]="{ color: '#fff', weight: 500, size: 13 }"
+                  [customizeText]="clinicianLabelText"
+                ></dxo-label>
+              </dxo-common-series-settings>
+
+              <!-- Thiqa Patient Count -->
+              <dxi-series
+                valueField="FootFall"
+                name="Thiqa Patients"
+                color="#007acc"
+              ></dxi-series>
+
+              <!-- Legend -->
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+
+              <!-- Tooltip -->
+              <dxo-tooltip
+                [enabled]="true"
+                [shared]="false"
+                [customizeTooltip]="clinicianTooltip"
+              ></dxo-tooltip>
+
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -60,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText
+                }"
+              >
+              </dxo-argument-axis>
+
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<dx-load-panel
+  *ngIf="loadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+>
+</dx-load-panel>
+
+<dx-load-panel
+  *ngIf="exportLoadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="exportLoadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+  message="Exporting..."
+>
+</dx-load-panel>

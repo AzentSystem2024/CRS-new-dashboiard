@@ -1,0 +1,480 @@
+<!-- Main card => 100vh scrollable start -->
+<div class="view-wrapper">
+  <!-- =============================Filter Params============================= -->
+  <div class="ExportDiv1">
+    <div class="mainDiv mb-1 p-0 m-0">
+      <!-- First Group -->
+      <div
+        class="row mt-1 mb-0 m-0 p-1"
+        (click)="Show_toggle_Groups_By_Div_click()"
+      >
+        <div class="col-10">
+          <dx-drop-down-box
+            class="dropdowncontent"
+            labelMode="floating"
+            labelLocation="left"
+            label="Facility value"
+            [(value)]="facilityvalue"
+            valueExpr="ID"
+            displayExpr="Name"
+            [showClearButton]="true"
+            [dataSource]="modifiedFacilityDatasource"
+            [dropDownOptions]="{
+              width: '70%',
+              height: '45vh',
+              position: {
+                my: 'left top',
+                at: 'left bottom',
+                of: '.dropdowncontent',
+                collision: 'fit flip'
+              }
+            }"
+          >
+            <div c *dxTemplate="let data of 'content'">
+              <dx-data-grid
+                [dataSource]="modifiedFacilityDatasource"
+                [columns]="[
+                  { dataField: 'ID', caption: 'Facility ID', width: 'auto' },
+                    {
+                      dataField: 'ShortName',
+                      caption: 'Short Name',
+                    },
+                    {
+                      dataField: 'Name',
+                      caption: 'FacilityName',
+                    },
+                    { dataField: 'Region', caption: 'Region', width: 'auto' },
+                    {
+                      dataField: 'ProviderType',
+                      caption: 'Provider Type',
+                      width: 'auto'
+                    }
+                ]"
+                [selection]="{ mode: 'multiple' }"
+                [hoverStateEnabled]="true"
+                [paging]="{ enabled: true, pageSize: 10 }"
+                [filterRow]="{ visible: true }"
+                [headerFilter]="{ visible: true }"
+                [scrolling]="{ mode: 'virtual' }"
+                [(selectedRowKeys)]="facilityvalue"
+                (onSelectionChanged)="
+                  onSelectionChanged(
+                    $event,
+                    this.FacilityDataSource,
+                    'modifiedFacilityDatasource'
+                  )
+                "
+                width="'50%'"
+                [height]="'100%'"
+              >
+              </dx-data-grid>
+            </div>
+          </dx-drop-down-box>
+        </div>
+        <div class="col-2">
+          <dx-button
+            class="add-card mt-2"
+            icon="refresh"
+            text="Apply"
+            type="success"
+            stylingMode="contained"
+            (onClick)="applyButtonClicked()"
+          ></dx-button>
+        </div>
+      </div>
+
+      <!-- Wrapper for Second and Third Rows -->
+      <div class="p-0 m-0" *ngIf="showGroups" @toggleRows>
+        <!-- Second Group -->
+        <div class="row ms-1 m-0 p-1">
+          <div class="col-2 mt-1">
+            <dx-form [formData]="dateForm" [labelMode]="'floating'">
+              <dxi-item
+                dataField="fromdate"
+                editorType="dxDateBox"
+                [editorOptions]="{
+                  applyValueMode: 'instantly',
+                  displayFormat: 'dd/MM/yyyy',
+                  valueFormat: 'yyyy/MM/dd',
+
+                }"
+              >
+                <dxo-label text="From Date"></dxo-label>
+              </dxi-item>
+            </dx-form>
+          </div>
+
+          <div class="col-2 mt-1">
+            <dx-form [formData]="dateForm" [labelMode]="'floating'">
+              <dxi-item
+                editorType="dxDateBox"
+                dataField="todate"
+                [editorOptions]="{
+                  applyValueMode: 'instantly',
+                  displayFormat: 'dd/MM/yyyy',
+                  valueFormat: 'yyyy/MM/dd',
+
+                }"
+              >
+                <dxo-label text="To Date"></dxo-label>
+              </dxi-item>
+            </dx-form>
+          </div>
+
+          <div class="col-3">
+            <dx-tag-box
+              [searchEnabled]="true"
+              [dropDownOptions]="{ height: 250 }"
+              [items]="DepartmentDatasource"
+              displayExpr="Name"
+              valueExpr="ID"
+              [(value)]="Departmentvalue"
+              [showSelectionControls]="true"
+              [showClearButton]="true"
+              (onMultiTagPreparing)="onMultiTagDepartmentPreparing($event)"
+              selectAllMode="allPages"
+              [maxDisplayedTags]="0"
+              [multiline]="false"
+              applyValueMode="instantly"
+              label="Department"
+              labelMode="floating"
+              (onValueChanged)="
+                reorderDataSource('Departmentvalue', 'DepartmentDatasource')
+              "
+            >
+            </dx-tag-box>
+          </div>
+
+          <div class="col-3">
+            <dx-tag-box
+              [searchEnabled]="true"
+              [dropDownOptions]="{ height: 250 }"
+              [items]="ServiceCategoryDatasource"
+              [(value)]="servicecategoryvalue"
+              displayExpr="Name"
+              valueExpr="ID"
+              [showSelectionControls]="true"
+              [showClearButton]="true"
+              (onMultiTagPreparing)="onMultiTagServiceCategoryPreparing($event)"
+              selectAllMode="allPages"
+              [maxDisplayedTags]="0"
+              [multiline]="false"
+              applyValueMode="instantly"
+              label="Service Category"
+              labelMode="floating"
+              [searchEnabled]="true"
+              (onValueChanged)="
+                reorderDataSource(
+                  'encountertypevalue',
+                  'EncountrTypeDatasource'
+                )
+              "
+            >
+            </dx-tag-box>
+          </div>
+
+          <!-- <div class="col-1 me-2">
+            <dx-button
+              class="mt-2"
+              icon="exportpdf"
+              text="export"
+              hint="export"
+              type="default"
+              [width]="'auto'"
+              (onClick)="export()"
+            >
+            </dx-button>
+          </div> -->
+
+          <div class="col-2 me-2">
+            <dx-drop-down-button
+              class="mt-1"
+              text="Export"
+              icon="export"
+              [width]="'auto'"
+              [visible]="vibleExportBtn"
+              [items]="exportOptions"
+              keyExpr="id"
+              displayExpr="text"
+              (onItemClick)="onExportClick($event)"
+              [elementAttr]="{
+                class: 'export-button'
+              }"
+            >
+            </dx-drop-down-button>
+          </div>
+        </div>
+      </div>
+      <!-- Toggle Button -->
+      <div class="row justify-content-center p-0 m-0">
+        <div class="col-12 text-center">
+          <dx-button
+            class="toggle-button"
+            [icon]="showGroups ? 'chevronup' : 'chevrondown'"
+            stylingMode="outlined"
+            type="default"
+            (click)="toggleGroups()"
+          ></dx-button>
+        </div>
+      </div>
+      <!-- Toggle Button end -->
+    </div>
+  </div>
+
+  <!-- =============================Card data Div============================= -->
+  <div class="graph-scroll-container">
+    <div class="">
+      <!-- ====================================Graph Loading==================== -->
+      <div class="graphContainer ExportDiv2">
+        <div
+          class="row ms-1 me-1 d-flex flex-nowrap gap-2 justify-content-start overflow-auto"
+        >
+          <div
+            class="card col-12 col-md-2 col-lg-2 col-sm-6 claimedCard p-0 m-0"
+          >
+            <div
+              class="card-body d-flex flex-column justify-content-center text-center"
+            >
+              <p class="card-text mt-5">Total Request Sent</p>
+              <!-- Title at the top -->
+              <p
+                class="card-text flex-grow-1 d-flex justify-content-center mb-5"
+              >
+                {{ ReguestSendCardValue }}
+              </p>
+              <!-- Value centered -->
+            </div>
+          </div>
+          <div class="ChartContent">
+            <dx-chart
+              id="chart"
+              [dataSource]="ApprovalStatusChartData"
+              [rotated]="true"
+              [size]="{ height: 200, width: 900 }"
+            >
+              <dxo-title text="Approval Status" hint=""></dxo-title>
+              <dxi-series
+                color="#79cac4"
+                type="bar"
+                argumentField="Status"
+                valueField="Count"
+                [barWidth]="20"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 400, size: 14 }"
+                  [customizeText]="customizeChartLabelText"
+                ></dxo-label>
+              </dxi-series>
+              <dxo-legend
+                [visible]="false"
+                verticalAlignment="top"
+                horizontalAlignment="right"
+              ></dxo-legend>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv3">
+        <div class="d-flex gap-1">
+          <div class="ChartContent">
+            <dx-chart
+              [size]="chartSize"
+              (onInitialized)="onChartInitialized($event)"
+              id="chart"
+              [dataSource]="mainSeriesChartDatasource"
+            >
+              <dxo-title
+                text="Prior Authorization Analysis"
+                hint=""
+              ></dxo-title>
+              <dxi-series valueField="Approved" name="Approved"></dxi-series>
+              <dxi-series valueField="Rejected" name="Rejected"></dxi-series>
+              <dxi-series
+                valueField="InProgress"
+                name="In progress"
+              ></dxi-series>
+              <dxi-series valueField="Cancelled" name="Cancelled"></dxi-series>
+              <dxo-common-series-settings
+                argumentField="EncounterType"
+                type="bar"
+                hoverMode="allArgumentPoints"
+                selectionMode="allArgumentPoints"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 400, size: 14 }"
+                  [customizeText]="customizeChartLabelText"
+                >
+                </dxo-label>
+              </dxo-common-series-settings>
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              >
+              </dxo-legend>
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv4">
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <dx-pie-chart
+              id="pie"
+              palette="bright"
+              style="padding-bottom: 80px"
+              [dataSource]="pieChartDatasource"
+            >
+              <dxo-title text="Service Category" hint=""></dxo-title>
+              <dxo-legend
+                orientation="horizontal"
+                itemTextPosition="right"
+                horizontalAlignment="center"
+                verticalAlignment="bottom"
+                [columnCount]="4"
+              ></dxo-legend>
+              <dxi-series argumentField="Service" valueField="Count">
+                <dxo-label
+                  [visible]="true"
+                  position="columns"
+                  [customizeText]="customizeLabel"
+                >
+                  <dxo-font [size]="16"></dxo-font>
+                  <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+            </dx-pie-chart>
+          </div>
+          <div class="ChartContent text-center">
+            <dx-chart
+              id="chart"
+              [dataSource]="TaTstatusDataSource"
+              style="padding-bottom: 80px"
+            >
+              <dxo-title text="TAT Status" hint=""></dxo-title>
+              <dxi-series
+                argumentField="TAT"
+                valueField="Count"
+                name="TAT Delay"
+                type="bar"
+                color="#8a1253"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [position]="'outside'"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 400, size: 14 }"
+                  [customizeText]="customizeLabelText"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-legend
+                [visible]="true"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv5">
+        <div class="d-flex gap-1">
+          <div class="ChartContent text-center">
+            <dx-chart
+              [valueAxis]=""
+              [dataSource]="AuthTATEfficiencyDatasource"
+              class="m-2 ps-1 pe-1"
+              style="padding-bottom: 80px"
+            >
+              <dxo-title text="Auth TAT Efficiency" hint=""></dxo-title>
+              <dxo-size [height]="402"></dxo-size>
+              <dxi-series
+                argumentField="Month"
+                valueField="Percent"
+                name="Month"
+                type="spline"
+                [dashStyle]="'dot'"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [position]="'outside'"
+                  [overlappingBehavior]="'stagger'"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 400, size: 14 }"
+                  [customizeText]="customizeFacilityLabelText"
+                ></dxo-label>
+              </dxi-series>
+
+              <dxo-legend [visible]="false"></dxo-legend>
+              <dxo-common-pane-settings>
+                <dxo-border
+                  [visible]="true"
+                  [width]="1"
+                  [top]="false"
+                  [right]="false"
+                ></dxo-border>
+              </dxo-common-pane-settings>
+
+              <dxo-export [enabled]="false"></dxo-export>
+              <dxo-tooltip [enabled]="true"></dxo-tooltip>
+              <dxo-legend
+                [visible]="true"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxo-argument-axis
+                type="discrete"
+                [position]="'bottom'"
+                [label]="{
+                rotationAngle: -70,
+                overlappingBehavior: 'rotate',
+              }"
+              >
+                <dxo-grid [visible]="true" [opacity]="0.5"></dxo-grid>
+              </dxo-argument-axis>
+              <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dx-load-panel
+  *ngIf="loadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#graph-scroll-container' }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+>
+</dx-load-panel>
+
+<dx-load-panel
+  *ngIf="exportLoadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="exportLoadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+  message="Exporting..."
+>
+</dx-load-panel>

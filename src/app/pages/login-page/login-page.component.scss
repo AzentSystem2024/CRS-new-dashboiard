@@ -1,0 +1,41 @@
+.background-radial-gradient {
+  background-image: url(../../../assets/medicalinsurancelifefamilycartravelandhouseconcept.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  padding: 0px;
+}
+
+.bg-glass {
+  background-color: var(--base-bg);
+  border-radius: 15px;
+  padding: 0px;
+  margin: 0px;
+  width: 70%;
+}
+.formHeading {
+  color: var(--text-color);
+}
+.button-container {
+  text-align: center;
+}
+.bottom-left-text {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.754);
+  background-color: rgba(234, 17, 28, 0.924);
+
+  display: flex;           /* ➜ enables spacing */
+  justify-content: space-between;
+  align-items: center;
+}
+
+.version-text {
+  font-size: 12px;
+  opacity: 0.5;
+}
+

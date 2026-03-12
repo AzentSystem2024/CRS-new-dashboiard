@@ -1,0 +1,550 @@
+<div class="view-wrapper pb-2 pt-1">
+  <div class="ExportDiv1">
+    <div class="mainDiv mb-1 p-0">
+      <!-- First Group -->
+      <div class="row ms-1 me-1" (click)="Show_toggle_Groups_By_Div_click()">
+        <div class="col-2 m-0">
+          <dx-select-box
+            label="Search On"
+            labelMode="floating"
+            [dataSource]="SearchOnDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="searchOnvalue"
+            required
+            [dropDownOptions]="{ height: 250 }"
+            [searchEnabled]="true"
+          ></dx-select-box>
+        </div>
+
+        <div class="col-2 mt-2">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              dataField="fromdate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd',
+              }"
+            >
+              <dxo-label text="From Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <div class="col-2 mt-2">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              editorType="dxDateBox"
+              dataField="todate"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd',
+              }"
+            >
+              <dxo-label text="To Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <div class="col-2 mt-2">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              editorType="dxDateBox"
+              dataField="AsOnDate"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd',
+              }"
+            >
+              <dxo-label text="Date As On"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <div class="col-2">
+          <dx-tag-box
+            [searchEnabled]="true"
+            [dropDownOptions]="{ height: 250 }"
+            [items]="EncountrTypeDatasource"
+            [(value)]="encountertypevalue"
+            displayExpr="Name"
+            valueExpr="ID"
+            [showSelectionControls]="true"
+            [showClearButton]="true"
+            (onMultiTagPreparing)="onMultiTagEncounterTypePreparing($event)"
+            selectAllMode="allPages"
+            [maxDisplayedTags]="0"
+            [multiline]="false"
+            applyValueMode="instantly"
+            label="Encounter Type"
+            labelMode="floating"
+            [searchEnabled]="true"
+            (onValueChanged)="
+              reorderDataSource('encountertypevalue', 'EncountrTypeDatasource')
+            "
+          >
+          </dx-tag-box>
+        </div>
+
+        <div class="col-2">
+          <dx-button
+            class="add-card mt-2"
+            icon="refresh"
+            text="Apply"
+            type="success"
+            stylingMode="contained"
+            (click)="applyButtonClicked(); $event.stopPropagation()"
+          ></dx-button>
+        </div>
+      </div>
+
+      <!-- Wrapper for Second and Third Rows -->
+      <div *ngIf="showGroups" @toggleRows>
+        <!-- Second Group -->
+        <div class="row mt-1 ms-1 me-1">
+          <div class="col-6">
+            <dx-drop-down-box
+              class="dropdowncontent"
+              labelMode="floating"
+              labelLocation="left"
+              label="Facility value"
+              [(value)]="facilityvalue"
+              valueExpr="ID"
+              displayExpr="Name"
+              [showClearButton]="true"
+              [dataSource]="modifiedFacilityDatasource"
+              [dropDownOptions]="{
+                width: 'auto',
+                height: '47vh',
+                position: {
+                  my: 'left top',
+                  at: 'left bottom',
+                  of: '.dropdowncontent',
+                  collision: 'fit flip',
+                },
+              }"
+            >
+              <div class="p-0" *dxTemplate="let data of 'content'">
+                <dx-data-grid
+                  [dataSource]="modifiedFacilityDatasource"
+                  [columns]="[
+                    { dataField: 'ID', caption: 'Facility ID', width: 'auto' },
+                    {
+                      dataField: 'ShortName',
+                      caption: 'Short Name',
+                    },
+                    {
+                      dataField: 'Name',
+                      caption: 'FacilityName',
+                    },
+                    { dataField: 'Region', caption: 'Region', width: 'auto' },
+                    {
+                      dataField: 'ProviderType',
+                      caption: 'Provider Type',
+                      width: 'auto',
+                    },
+                  ]"
+                  [selection]="{ mode: 'multiple' }"
+                  [hoverStateEnabled]="true"
+                  [paging]="{ enabled: true, pageSize: 10 }"
+                  [filterRow]="{ visible: true }"
+                  [headerFilter]="{ visible: true }"
+                  [scrolling]="{ mode: 'virtual' }"
+                  [(selectedRowKeys)]="facilityvalue"
+                  (onSelectionChanged)="
+                    onSelectionChanged(
+                      $event,
+                      this.FacilityDataSource,
+                      'modifiedFacilityDatasource'
+                    )
+                  "
+                  width="'50%'"
+                  [height]="'100%'"
+                >
+                </dx-data-grid>
+              </div>
+            </dx-drop-down-box>
+          </div>
+
+          <div class="col-2">
+            <dx-tag-box
+              [searchEnabled]="true"
+              [dropDownOptions]="{ height: 250 }"
+              [items]="DepartmentDatasource"
+              displayExpr="Name"
+              valueExpr="ID"
+              [(value)]="DepartmentValue"
+              label="Department"
+              labelMode="floating"
+              [showSelectionControls]="true"
+              (onMultiTagPreparing)="onMultiTagDepartmentPreparing($event)"
+              selectAllMode="allPages"
+              [maxDisplayedTags]="0"
+              [multiline]="false"
+              [showClearButton]="true"
+              applyValueMode="instantly"
+              (onValueChanged)="
+                reorderDataSource('DepartmentValue', 'DepartmentDatasource')
+              "
+            ></dx-tag-box>
+          </div>
+
+          <div class="col-2 d-flex align-items-end">
+            <div class="position-relative flex-grow-1" style="min-width: 0">
+              <dx-tag-box
+                #insuranceTagBox
+                [searchEnabled]="true"
+                displayExpr="Name"
+                valueExpr="ID"
+                required
+                [readOnly]="true"
+                label="Insurance"
+                labelMode="floating"
+                [(value)]="insuranceNewValue"
+                [items]="insuranceSelectedItems"
+                [showSelectionControls]="true"
+                [showClearButton]="true"
+                selectAllMode="allPages"
+                [multiline]="false"
+                applyValueMode="instantly"
+                [dropDownOptions]="{ height: 250 }"
+                (click)="handleInsuranceClick($event)"
+                [attr.title]="getInsuranceTooltip()"
+                (onValueChanged)="onInsuranceValueChanged($event)"
+              ></dx-tag-box>
+
+              <!-- Search icon positioned inside the tag-box -->
+              <dx-button
+                icon="search"
+                (onClick)="openInsurancePopup()"
+                class="tagbox-search-button"
+              ></dx-button>
+            </div>
+          </div>
+
+          <div class="col-2 ms-auto">
+            <dx-drop-down-button
+              class="mt-2"
+              text="Export"
+              icon="export"
+              [width]="'auto'"
+              [visible]="vibleExportBtn"
+              [items]="exportOptions"
+              keyExpr="id"
+              displayExpr="text"
+              (onItemClick)="onExportClick($event)"
+              [elementAttr]="{
+                class: 'export-button',
+              }"
+            >
+            </dx-drop-down-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggle Button -->
+      <div class="row justify-content-center p-0 m-0">
+        <div class="col-12 text-center">
+          <dx-button
+            class="toggle-button"
+            [icon]="showGroups ? 'chevronup' : 'chevrondown'"
+            stylingMode="outlined"
+            type="default"
+            (click)="toggleGroups()"
+          ></dx-button>
+        </div>
+      </div>
+      <!-- Toggle Button end -->
+    </div>
+  </div>
+
+  <div class="graph-scroll-container">
+    <div class="">
+      <div class="graphContainer ExportDiv2">
+        <div class="d-flex gap-1">
+          <div class="ChartContent">
+            <dx-chart
+              [size]="chartSize"
+              id="chart"
+              [dataSource]="BarChartDataSource"
+              (onInitialized)="onChartInitialized($event)"
+            >
+              <dxo-title
+                text="Claim Analysis"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial',
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+              <dxi-series
+                valueField="ClaimedAmount"
+                name="Claimed"
+              ></dxi-series>
+              <dxi-series
+                valueField="RemittedAmount"
+                name="Remitted"
+              ></dxi-series>
+              <dxi-series valueField="PaidAmount" name="Paid"></dxi-series>
+              <dxi-series
+                valueField="DeniedAmount"
+                name="Denied"
+                color="#ff2e1f"
+              ></dxi-series>
+              <dxi-series
+                valueField="PendingAmount"
+                name="Pending"
+              ></dxi-series>
+              <dxi-series
+                *ngIf="isTakenBackAmountAvailable"
+                valueField="TakenBackAmount"
+                name="TakenBack"
+                color="#ff9421"
+              ></dxi-series>
+              <dxo-common-series-settings
+                argumentField="ResubmissionLevel"
+                type="bar"
+                [barPadding]="0"
+              >
+                <dxo-label
+                  [visible]="true"
+                  position="outside"
+                  [rotationAngle]="-75"
+                  [format]="{
+                    type: 'fixedPoint',
+                    precision: 0,
+                  }"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 400, size: 14 }"
+                  [customizeText]="MillioncustomizeLabel"
+                >
+                </dxo-label>
+
+                <!-- <dxo-bar [cornerRadius]="4"></dxo-bar> -->
+
+                <dxo-shadow
+                  [opacity]="0.7"
+                  [blur]="15"
+                  [color]="'rgba(0, 0, 0, 0.6)'"
+                  [offsetX]="5"
+                  [offsetY]="5"
+                ></dxo-shadow>
+              </dxo-common-series-settings>
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              >
+              </dxo-legend>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="barChartcustomizeTooltip"
+              ></dxo-tooltip>
+              <dxo-export [enabled]="false"></dxo-export>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv3">
+        <div class="d-flex gap-1 p-0 m-0">
+          <div class="ChartContent text-center">
+            <dx-chart
+              style="padding-bottom: 80px"
+              palette="bright"
+              [dataSource]="pieChartDatasource"
+            >
+              <dxo-title
+                text="Insurance Ageing"
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial',
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+
+              <dxo-legend
+                [visible]="true"
+                orientation="horizontal"
+                itemTextPosition="right"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+
+              <dxi-series
+                name="Age"
+                argumentField="Age"
+                valueField="Amount"
+                type="bar"
+                color="#FFC324"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [customizeText]="customizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false }"
+                >
+                </dxo-label>
+              </dxi-series>
+
+              <dxo-argument-axis
+                [label]="{
+                  rotationAngle: -45,
+                  overlappingBehavior: 'rotate',
+                }"
+              >
+              </dxo-argument-axis>
+
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="customizeTooltip"
+              ></dxo-tooltip>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer ExportDiv4">
+        <div class="d-flex gap-1">
+          <div class="ChartContent">
+            <dx-chart
+              id="chart"
+              [dataSource]="InsuranceSubmissionRevenueMOMDatasource"
+              resolveLabelOverlapping="stack"
+            >
+              <dxo-title
+                text="Revenue based on Submission Date (month-wise)"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial',
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+              <dxi-series
+                valueField="SubmissionOP"
+                name="SubmissionOP"
+                color="#0d66c2"
+              ></dxi-series>
+              <dxi-series
+                valueField="SubmissionIP"
+                name="SubmissionIP"
+                color="#e8e56b"
+              ></dxi-series>
+              <dxi-series
+                valueField="SubmissionPH"
+                name="SubmissionPH"
+                color="#8a114a"
+              ></dxi-series>
+              <dxi-series
+                valueField="Resubmission"
+                name="Resubmission"
+                color="#b0bbc1"
+              ></dxi-series>
+              <dxo-common-series-settings
+                argumentField="MonthName"
+                type="stackedBar"
+                [barWidth]="60"
+              >
+                <dxo-label
+                  [visible]="true"
+                  format="millions"
+                  [horizontalOffset]="50"
+                  [verticalOffset]="0"
+                  [backgroundColor]="'transparent'"
+                  [font]="{
+                    color: 'var(--base-text-color)',
+                    weight: 400,
+                    size: 12,
+                  }"
+                  [customizeText]="customizeLabelText"
+                >
+                </dxo-label>
+              </dxo-common-series-settings>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="TotalcustomizeChartToolTip"
+              >
+              </dxo-tooltip>
+              <dxo-legend
+                [visible]="true"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<dx-load-panel
+  *ngIf="loadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+>
+</dx-load-panel>
+
+<dx-load-panel
+  *ngIf="exportLoadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="exportLoadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+  message="Exporting..."
+>
+</dx-load-panel>
+
+<dx-popup
+  [(visible)]="insurancePopupVisible"
+  [width]="600"
+  [height]="500"
+  [showTitle]="true"
+  title="Select Insurance"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+>
+  <div *dxTemplate="let data of 'content'" class="popup-content">
+    <dx-data-grid
+      [dataSource]="insuranceDataSource1"
+      [selection]="{ mode: 'multiple' }"
+      [showBorders]="true"
+      [height]="400"
+      (onSelectionChanged)="onInsuranceSelectionChanged($event)"
+      [selectedRowKeys]="insuranceValue"
+    >
+      <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+      <dxo-pager
+        [visible]="true"
+        [displayMode]="displayMode"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      ></dxo-pager>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-load-panel [showPane]="false"></dxo-load-panel>
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <!-- <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]"></dxo-pager> -->
+      <dxi-column dataField="ID" caption="ID" width="100"></dxi-column>
+      <dxi-column dataField="Name" caption="Insurance Name"></dxi-column>
+    </dx-data-grid>
+  </div>
+</dx-popup>

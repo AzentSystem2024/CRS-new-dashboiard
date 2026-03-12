@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="gap-2 card-main pb-2">
+        <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+          <ticker-card
+            titleText="Claimed"
+            total="{{ ClaimAmount }}"
+            [percentage]="claimPrcnt"
+            class="claimed"
+            icon="datatrending"
+          ></ticker-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+          <ticker-card
+            titleText="Remitted"
+            class="remitted"
+            total="{{ remittedAmt }}"
+            [percentage]="remittedPercnt"
+            icon="dataarea"
+          ></ticker-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+          <ticker-card
+            class="auto-width"
+            titleText="Paid"
+            class="paid"
+            total="{{ paidAmt }}"
+            [percentage]="paidPrcnt"
+            icon="bookmark"
+          ></ticker-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+          <ticker-card
+            titleText="Denied"
+            total="{{ deniedAmt }}"
+            class="denied"
+            [percentage]="deniedPrcnt"
+            icon="datapie"
+          ></ticker-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+          <ticker-card
+            titleText="Balance"
+            class="balance"
+            total="{{ balanceAmt }}"
+            [percentage]="balancePrcnt"
+            icon="money"
+          ></ticker-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

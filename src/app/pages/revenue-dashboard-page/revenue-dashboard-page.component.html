@@ -1,0 +1,812 @@
+<!-- Main card => 100vh scrollable start -->
+<div class="view-wrapper fullpageDiv">
+  <!-- =============================Filter Params============================= -->
+  <div class="ExportDiv1">
+    <div class="mainDiv mb-1 p-0">
+      <!-- First Group -->
+      <div class="row ms-1 me-1" (click)="Show_toggle_Groups_By_Div_click()">
+        <div class="col-2 m-0">
+          <dx-select-box
+            label="Search On"
+            labelMode="floating"
+            [dataSource]="SearchOnDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="searchOnvalue"
+            required
+            [dropDownOptions]="{ height: 250 }"
+            [searchEnabled]="true"
+          ></dx-select-box>
+        </div>
+
+        <div class="col-2 mt-1">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              dataField="fromdate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd',
+              }"
+            >
+              <dxo-label text="From Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <div class="col-2 mt-1">
+          <dx-form [formData]="dateForm" [labelMode]="'floating'">
+            <dxi-item
+              editorType="dxDateBox"
+              dataField="todate"
+              [editorOptions]="{
+                applyValueMode: 'instantly',
+                displayFormat: 'dd/MM/yyyy',
+                valueFormat: 'yyyy/MM/dd',
+              }"
+            >
+              <dxo-label text="To Date"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+
+        <div class="col-3">
+          <dx-select-box
+            [dataSource]="RejectionIndexDatasource"
+            displayExpr="Name"
+            valueExpr="ID"
+            [(value)]="rejectionIndexvalue"
+            required
+            label="Submission"
+            labelMode="floating"
+            [dropDownOptions]="{ height: 250 }"
+            [searchEnabled]="true"
+          ></dx-select-box>
+        </div>
+
+        <div class="col-3">
+          <dx-tag-box
+            [searchEnabled]="true"
+            [dropDownOptions]="{ height: 250 }"
+            [items]="EncountrTypeDatasource"
+            [(value)]="encountertypevalue"
+            displayExpr="Name"
+            valueExpr="ID"
+            [showSelectionControls]="true"
+            [multiline]="false"
+            [showClearButton]="true"
+            (onMultiTagPreparing)="onMultiTagEncounterTypePreparing($event)"
+            selectAllMode="allPages"
+            [maxDisplayedTags]="0"
+            applyValueMode="instantly"
+            label="Encounter Type"
+            labelMode="floating"
+            [searchEnabled]="true"
+            (onValueChanged)="
+              reorderDataSource('encountertypevalue', 'EncountrTypeDatasource')
+            "
+          >
+          </dx-tag-box>
+        </div>
+      </div>
+
+      <!-- Wrapper for Second and Third Rows -->
+      <div *ngIf="showGroups" @toggleRows>
+        <!-- Second Group -->
+        <div class="row ms-1 me-1">
+          <div class="col-10">
+            <dx-drop-down-box
+              class="dropdowncontent"
+              labelMode="floating"
+              labelLocation="left"
+              label="Facility value"
+              [(value)]="facilityvalue"
+              valueExpr="ID"
+              displayExpr="Name"
+              [showClearButton]="true"
+              [dataSource]="modifiedFacilityDatasource"
+              [dropDownOptions]="{
+                width: '70%',
+                height: '45vh',
+                position: {
+                  my: 'left top',
+                  at: 'left bottom',
+                  of: '.dropdowncontent',
+                  collision: 'fit flip',
+                },
+              }"
+            >
+              <div c *dxTemplate="let data of 'content'">
+                <dx-data-grid
+                  [dataSource]="modifiedFacilityDatasource"
+                  [columns]="[
+                    { dataField: 'ID', caption: 'Facility ID', width: 'auto' },
+                    {
+                      dataField: 'ShortName',
+                      caption: 'Short Name',
+                      width: 'auto',
+                    },
+                    {
+                      dataField: 'Name',
+                      caption: 'FacilityName',
+                    },
+                    { dataField: 'Region', caption: 'Region', width: 'auto' },
+                    {
+                      dataField: 'ProviderType',
+                      caption: 'Provider Type',
+                      width: 'auto',
+                    },
+                  ]"
+                  [selection]="{ mode: 'multiple' }"
+                  [hoverStateEnabled]="true"
+                  [paging]="{ enabled: true, pageSize: 10 }"
+                  [filterRow]="{ visible: true }"
+                  [headerFilter]="{ visible: true }"
+                  [scrolling]="{ mode: 'virtual' }"
+                  [(selectedRowKeys)]="facilityvalue"
+                  (onSelectionChanged)="
+                    onSelectionChanged(
+                      $event,
+                      this.FacilityDataSource,
+                      'modifiedFacilityDatasource'
+                    )
+                  "
+                  width="'50%'"
+                  [height]="'100%'"
+                >
+                </dx-data-grid>
+              </div>
+            </dx-drop-down-box>
+          </div>
+
+          <div class="col-2 me-auto">
+            <dx-button
+              class="add-card mt-2"
+              icon="refresh"
+              text="Apply"
+              type="success"
+              stylingMode="contained"
+              (click)="applyButtonClicked()"
+            ></dx-button>
+          </div>
+        </div>
+
+        <!-- ---Third row--- -->
+        <div class="row mt-1 ms-1 me-1">
+          <div class="col-3">
+            <dx-tag-box
+              [searchEnabled]="true"
+              [dropDownOptions]="{ height: 250 }"
+              [items]="blockDataSource"
+              displayExpr="Name"
+              valueExpr="ID"
+              [(value)]="blockValue"
+              [showClearButton]="true"
+              (onMultiTagPreparing)="onMultiTagEncounterTypePreparing($event)"
+              selectAllMode="allPages"
+              [maxDisplayedTags]="0"
+              label="Block"
+              labelMode="floating"
+              [showSelectionControls]="true"
+              [multiline]="false"
+              applyValueMode="instantly"
+              (onValueChanged)="
+                reorderDataSource('blockValue', 'blockDataSource')
+              "
+            ></dx-tag-box>
+          </div>
+
+          <div class="col-3">
+            <dx-tag-box
+              [searchEnabled]="true"
+              [dropDownOptions]="{ height: 250 }"
+              [items]="departmentDataSource"
+              displayExpr="Name"
+              valueExpr="ID"
+              [(value)]="departmentValue"
+              label="Department"
+              labelMode="floating"
+              [showSelectionControls]="true"
+              [showClearButton]="true"
+              (onMultiTagPreparing)="onMultiTagDepartmentPreparing($event)"
+              selectAllMode="allPages"
+              [maxDisplayedTags]="0"
+              [multiline]="false"
+              applyValueMode="instantly"
+              (onValueChanged)="
+                reorderDataSource('departmentValue', 'departmentDataSource')
+              "
+            ></dx-tag-box>
+          </div>
+
+          <div class="col-4 d-flex align-items-end">
+            <div class="position-relative flex-grow-1" style="min-width: 0">
+              <dx-tag-box
+                #insuranceTagBox
+                [searchEnabled]="true"
+                displayExpr="Name"
+                valueExpr="ID"
+                required
+                label="Insurance"
+                labelMode="floating"
+                [(value)]="insuranceNewValue"
+                [items]="insuranceSelectedItems"
+                [showSelectionControls]="true"
+                [showClearButton]="true"
+                selectAllMode="allPages"
+                [multiline]="false"
+                applyValueMode="instantly"
+                [dropDownOptions]="{ height: 250 }"
+                (click)="handleInsuranceClick($event)"
+                [attr.title]="getInsuranceTooltip()"
+                (onValueChanged)="onInsuranceValueChanged($event)"
+              ></dx-tag-box>
+
+              <!-- Search icon positioned inside the tag-box -->
+              <dx-button
+                icon="search"
+                (onClick)="openInsurancePopup()"
+                class="tagbox-search-button"
+              ></dx-button>
+            </div>
+          </div>
+
+          <div class="col-2 me-2 justify-content-center">
+            <dx-drop-down-button
+              class="mt-2"
+              text="Export"
+              icon="export"
+              [width]="'auto'"
+              [visible]="vibleExportBtn"
+              [items]="exportOptions"
+              keyExpr="id"
+              displayExpr="text"
+              (onItemClick)="onExportClick($event)"
+              [elementAttr]="{
+                class: 'export-button',
+              }"
+            >
+            </dx-drop-down-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggle Button -->
+      <div class="row justify-content-center p-0 m-0">
+        <div class="col-12 text-center">
+          <dx-button
+            class="toggle-button"
+            [icon]="showGroups ? 'chevronup' : 'chevrondown'"
+            stylingMode="outlined"
+            type="default"
+            (click)="toggleGroups()"
+          ></dx-button>
+        </div>
+      </div>
+      <!-- Toggle Button end -->
+    </div>
+  </div>
+
+  <!-- =============================Card data Div============================= -->
+  <div class="graph-scroll-container">
+    <div class="ExportDiv2">
+      <div
+        class="row ms-3 me-1 d-flex flex-nowrap gap-2 justify-content-start overflow-auto"
+      >
+        <div class="card col-12 col-md-2 col-lg-2 col-sm-6 claimedCard p-0 m-0">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-datatrending me-1 iconBackground"></i>
+              <p class="card-title mb-0">Claimed</p>
+            </div>
+            <p class="card-text m-0">{{ ClaimAmount }}</p>
+          </div>
+        </div>
+
+        <!-- Remitted Card -->
+        <div
+          class="card col-12 col-md-2 col-lg-2 col-sm-6 RemittedCard p-0 m-0"
+        >
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-dataarea me-1 iconBackground"></i>
+              <p class="card-title mb-0">Remitted</p>
+              <span class="ms-auto percentage">{{ remittedPercnt }}%</span>
+            </div>
+            <p class="card-text">{{ remittedAmt }}</p>
+          </div>
+        </div>
+
+        <!-- Paid Card -->
+        <div class="card col-12 col-md-2 col-lg-2 col-sm-6 paidCard p-0 m-0">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-bookmark me-1 iconBackground"></i>
+              <p class="card-title mb-0">Paid</p>
+              <span class="ms-auto percentage">{{ paidPrcnt }}%</span>
+            </div>
+            <p class="card-text">{{ paidAmt }}</p>
+          </div>
+        </div>
+
+        <!-- Rejected Card -->
+        <div class="card col-12 col-md-2 col-lg-2 col-sm-6 deniedCard p-0 m-0">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-datapie me-1 iconBackground"></i>
+              <p class="card-title mb-0">Rejected</p>
+              <span class="ms-auto percentage">{{ deniedPrcnt }}%</span>
+            </div>
+            <p class="card-text">{{ deniedAmt }}</p>
+          </div>
+        </div>
+
+        <!-- Un-Remitted Card -->
+        <div class="card col-12 col-md-2 col-lg-2 col-sm-6 balanceCard p-0 m-0">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-dataarea me-1 iconBackground"></i>
+              <p class="card-title mb-0">Un-Remitted</p>
+              <span class="ms-auto percentage">{{ balancePrcnt }}%</span>
+            </div>
+            <p class="card-text">{{ balanceAmt }}</p>
+          </div>
+        </div>
+
+        <!-- Remittance % Card -->
+        <div class="card col-12 col-md-2 col-lg-2 col-sm-6 bg-danger p-0 m-0">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-dataarea me-1 iconBackground"></i>
+              <p class="card-title mb-0">Remittance %</p>
+            </div>
+            <p class="card-text">{{ remittancePrcnt }}%</p>
+          </div>
+        </div>
+
+        <!-- Rejection % Card -->
+        <div
+          class="card col-12 col-md-2 col-lg-2 col-sm-6 rejectionPrcntCard p-0 m-0"
+        >
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center text-center m-0">
+              <i class="dx-icon dx-icon-datapie me-1 iconBackground"></i>
+              <p class="card-title mb-0">Paid %</p>
+            </div>
+            <p class="card-text">{{ paidPrcnt }}%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================Graph Loading==================== -->
+
+      <div class="graphContainer">
+        <div class="d-flex gap-1">
+          <div class="ChartContent">
+            <dx-chart
+              [size]="chartSize"
+              (onInitialized)="onChartInitialized($event)"
+              class="m-2 ps-5 pe-5"
+              palette="violet"
+              [dataSource]="RemittanceRejectionPercentDatasource"
+            >
+              <dxo-title
+                class="graphTitle"
+                text="Remittance % and Paid %"
+                hint=""
+                [font]="{
+                  size: 20,
+                  weight: 700,
+                  family: 'Arial',
+                }"
+                [alignment]="'center'"
+              ></dxo-title>
+              <dxi-series
+                valueField="RemittedPercent"
+                name="Remittance %"
+                color="#f0d43a"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                  <dxo-connector [visible]="false"></dxo-connector>
+                  <dxo-format type="fixedPoint" precision="2"></dxo-format>
+                </dxo-label>
+              </dxi-series>
+              <dxi-series
+                valueField="PaidPercent"
+                name="Paid %"
+                color="#4caf50"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                  <dxo-connector [visible]="false"></dxo-connector>
+                  <dxo-format type="fixedPoint" precision="2"></dxo-format>
+                  <dxo-position [offset]="30"></dxo-position></dxo-label
+              ></dxi-series>
+
+              <dxo-common-series-settings
+                #seriesSettings
+                argumentField="Month"
+                type="spline"
+              >
+              </dxo-common-series-settings>
+              <dxo-margin [bottom]="20"></dxo-margin>
+              <dxo-common-axis-settings>
+                <dxo-grid [visible]="true"></dxo-grid>
+              </dxo-common-axis-settings>
+              <dxo-legend
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              >
+              </dxo-legend>
+              <dxo-argument-axis
+                type="discrete"
+                [allowDecimals]="false"
+                [axisDivisionFactor]="60"
+              >
+                <dxo-label [visible]="true">
+                  <dxo-format type="decimal"></dxo-format>
+                </dxo-label>
+              </dxo-argument-axis>
+              <!-- <dxo-tooltip [enabled]="true"></dxo-tooltip> -->
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer">
+        <div class="d-flex gap-1" id="dragg1">
+          <div
+            class="ChartContent text-center draggable"
+            draggable="true"
+            id="chart1"
+            (dblclick)="zoomChart('chart1')"
+          >
+            <div style="position: relative">
+              <div
+                style="position: absolute; top: 8px; right: 50px; z-index: 10"
+              >
+                <dx-button
+                  [icon]="isZoomedInChart1 ? 'collapse' : 'expandform'"
+                  [hint]="isZoomedInChart1 ? 'Zoom out' : 'Zoom in'"
+                  type="normal"
+                  (onClick)="zoomChart('chart1')"
+                  class="expand-btn"
+                ></dx-button>
+              </div>
+            </div>
+
+            <dx-pie-chart
+              class="p-0 m-0"
+              palette="bright"
+              [dataSource]="CaseTypeRejectionDataSource"
+            >
+              <dxo-title text="Case Wise Revenue %" hint=""></dxo-title>
+
+              <dxo-legend
+                orientation="horizontal"
+                itemTextPosition="right"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+                [columnCount]="4"
+              ></dxo-legend>
+              <dxo-export [enabled]="caseWiseRevenueExport"></dxo-export>
+
+              <dxi-series argumentField="CaseType" valueField="Paid">
+                <dxo-label
+                  [visible]="true"
+                  position="columns"
+                  [customizeText]="customizeLabel"
+                >
+                  <dxo-connector [visible]="true"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+            </dx-pie-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer">
+        <div class="d-flex gap-1">
+          <div class="ChartContent p-3">
+            <dx-chart
+              id="chart"
+              [dataSource]="ToptenInsuranceRejectedDataSource"
+              [rotated]="true"
+            >
+              <dxo-title text="Top 10 Insurance" hint=""></dxo-title>
+              <dxo-legend
+                [visible]="false"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxi-series
+                name="Insurance"
+                argumentField="InsuranceShortName"
+                valueField="Paid"
+                type="bar"
+                color="#294730"
+              >
+                <dxo-label
+                  [visible]="true"
+                  format="millions"
+                  [customizeText]="MillioncustomizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -60,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText,
+                }"
+              >
+              </dxo-argument-axis>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="top10InsuranceDataCustomizeTooltip"
+              ></dxo-tooltip>
+            </dx-chart>
+          </div>
+
+          <div class="ChartContent p-3">
+            <dx-chart
+              id="chart"
+              [dataSource]="TopTenFacilityRejectedDataSource"
+              [rotated]="true"
+            >
+              <dxo-title text="Top 10 Facility" hint=""></dxo-title>
+              <dxo-legend
+                [visible]="false"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxi-series
+                name="Facility"
+                argumentField="FacilityShortName"
+                valueField="Paid"
+                type="bar"
+                color="#800d09"
+              >
+                <dxo-label
+                  [visible]="true"
+                  format="millions"
+                  [customizeText]="MillioncustomizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="top10FacilityDataCustomizeTooltip"
+              ></dxo-tooltip>
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -60,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText,
+                }"
+              >
+              </dxo-argument-axis>
+            </dx-chart>
+          </div>
+
+          <div class="ChartContent p-3">
+            <dx-chart
+              id="chart"
+              [dataSource]="TopTenCodeRejectedDataSource"
+              [rotated]="true"
+            >
+              <dxo-title text="Top 10 Code" hint=""></dxo-title>
+              <dxo-legend
+                [visible]="false"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxi-series
+                name="Code"
+                argumentField="CPTCode"
+                valueField="Paid"
+                type="bar"
+                color="#1b53e0"
+              >
+                <dxo-label
+                  [visible]="true"
+                  [customizeText]="MillioncustomizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="top10CodeDataCustomizeTooltip"
+              ></dxo-tooltip>
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -60,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText,
+                }"
+              >
+              </dxo-argument-axis>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphContainer">
+        <div class="d-flex gap-1">
+          <div class="ChartContent" style="padding-bottom: 80px">
+            <dx-chart
+              id="chart"
+              [dataSource]="TopTenDepartmentWiseRejectedDataSource"
+            >
+              <dxo-title text="Top 10 Department" hint=""></dxo-title>
+              <dxo-legend
+                [visible]="true"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxi-series
+                name="Department"
+                argumentField="Department"
+                valueField="Paid"
+                type="bar"
+                color="#3a752e"
+              >
+                <dxo-label
+                  [visible]="true"
+                  format="millions"
+                  position="outside"
+                  [customizeText]="MillioncustomizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -35,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText,
+                }"
+              >
+              </dxo-argument-axis>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="top10DepartmentDataCustomizeTooltip"
+              ></dxo-tooltip>
+            </dx-chart>
+          </div>
+
+          <div class="ChartContent" style="padding-bottom: 80px">
+            <dx-chart
+              id="chart"
+              [dataSource]="TopTenDoctorWiseRejectedDataSource"
+            >
+              <dxo-title text="Top 10 Clinician " hint=""></dxo-title>
+              <dxo-legend
+                [visible]="true"
+                verticalAlignment="bottom"
+                horizontalAlignment="center"
+              ></dxo-legend>
+              <dxi-series
+                name="Clinician"
+                argumentField="ClinicianShortName"
+                valueField="Paid"
+                type="bar"
+                color="#c97f34"
+              >
+                <dxo-label
+                  [visible]="true"
+                  format="millions"
+                  position="outside"
+                  [customizeText]="MillioncustomizeLabel"
+                  [backgroundColor]="'transparent'"
+                  [border]="{ visible: false, color: '#294730', width: 1 }"
+                  [font]="{ color: 'var(--text-color)', weight: 600, size: 14 }"
+                >
+                </dxo-label>
+              </dxi-series>
+              <dxo-argument-axis
+                [position]="'bottom'"
+                [label]="{
+                  rotationAngle: -35,
+                  overlappingBehavior: 'rotate',
+                  customizeText: formatXAxisText,
+                }"
+              >
+              </dxo-argument-axis>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="top10ClinicianDataCustomizeTooltip"
+              ></dxo-tooltip>
+            </dx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dx-load-panel
+  *ngIf="loadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+>
+</dx-load-panel>
+
+<dx-load-panel
+  *ngIf="exportLoadingVisible"
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#fullpageDiv' }"
+  [(visible)]="exportLoadingVisible"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [hideOnOutsideClick]="false"
+  message="Exporting..."
+>
+</dx-load-panel>
+
+<dx-popup
+  [(visible)]="insurancePopupVisible"
+  [width]="600"
+  [height]="500"
+  [showTitle]="true"
+  title="Select Insurance"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+>
+  <div *dxTemplate="let data of 'content'" class="popup-content">
+    <dx-data-grid
+      [dataSource]="insuranceDataSource1"
+      [selection]="{ mode: 'multiple' }"
+      [showBorders]="true"
+      [height]="400"
+      (onSelectionChanged)="onInsuranceSelectionChanged($event)"
+      [selectedRowKeys]="insuranceValue"
+    >
+      <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+      <dxo-pager
+        [visible]="true"
+        [displayMode]="displayMode"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      ></dxo-pager>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-load-panel [showPane]="false"></dxo-load-panel>
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxi-column dataField="Name" caption="Insurance Name"></dxi-column>
+    </dx-data-grid>
+  </div>
+</dx-popup>
