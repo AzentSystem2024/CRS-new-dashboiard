@@ -816,11 +816,12 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     this.exportLoadingVisible = true;
     const exportDiv1 = document.querySelector('.ExportDiv1') as HTMLElement;
     const exportDiv2 = document.querySelector('.ExportDiv2') as HTMLElement;
+    const exportDiv3 = document.querySelector('.ExportDiv3') as HTMLElement;
     const reportName = 'Revenue Dashboard';
     const start = performance.now();
 
     this.service
-      .exportGraphData(reportName, [exportDiv1, exportDiv2])
+      .exportGraphData(reportName, [exportDiv1, exportDiv2, exportDiv3])
       .then(() => {
         this.exportLoadingVisible = false;
         const end = performance.now();

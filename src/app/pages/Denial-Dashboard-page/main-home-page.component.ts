@@ -720,7 +720,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     const exportDiv4 = document.querySelector('.ExportDiv4') as HTMLElement;
     const exportDiv5 = document.querySelector('.ExportDiv5') as HTMLElement;
     const exportDiv6 = document.querySelector('.ExportDiv6') as HTMLElement;
-    const exportDiv7 = document.querySelector('.ExportDiv7') as HTMLElement;
     const reportName = 'Denial Dashboard';
 
     const start = performance.now();
@@ -733,7 +732,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
         exportDiv4,
         exportDiv5,
         exportDiv6,
-        exportDiv7,
+
       ])
       .then(() => {
         this.exportLoadingVisible = false;
