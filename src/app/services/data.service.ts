@@ -82,11 +82,11 @@ export class DataService {
     { name: 'November', value: 10 },
     { name: 'December', value: 11 },
   ];
-  Id: number;
+  Id: number | undefined;
 
-  Assigned: string;
+  Assigned: string | undefined;
 
-  Subject: string;
+  Subject: string | undefined;
 
   private _values = new Subject();
 
@@ -135,7 +135,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_CLAIMSUMMARY_HOME;
@@ -166,7 +166,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_FINANCE_DASHBOARD_CLAIMSUMMARY_HOME;
@@ -220,7 +220,7 @@ export class DataService {
     department: any,
     category: any,
     payer: any,
-    physiciancategory: any
+    physiciancategory: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_PRIOR_DASHBOARD;
@@ -246,7 +246,7 @@ export class DataService {
     dateTo: any,
     facility: any,
     department: any,
-    category: any
+    category: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_PRIOR_DASHBOARD_OPERATIONS;
@@ -270,7 +270,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_REVENUE_HOME;
@@ -297,7 +297,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_CEO_HOME_PART1;
@@ -320,7 +320,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const sessionID = sessionStorage.getItem('SessionID');
     const url = CRS_DASHBOARD_CEO_HOME_PART2;
@@ -354,7 +354,7 @@ export class DataService {
     clinician: any,
     department: any,
     category: any,
-    level: any
+    level: any,
   ) {
     const url = CRS_DASHBOARD_EnM_HOME;
     const reqBodyData = {
@@ -449,7 +449,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_CLAIMSUMMARY_HOME;
     const reqBodyData = {
@@ -468,7 +468,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_SUBMISSION_HOME;
     const reqBodyData = {
@@ -486,7 +486,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_REMITTANCE_HOME;
     const reqBodyData = {
@@ -504,7 +504,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_RCM_HOME;
     const reqBodyData = {
@@ -522,7 +522,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_CLINICIAN_HOME;
     const reqBodyData = {
@@ -540,7 +540,7 @@ export class DataService {
     facility: any,
     encounterType: any,
     fromdate: any,
-    todate: any
+    todate: any,
   ) {
     const url = CRS_DASHBOARD_RECEIVER_HOME;
     const reqBodyData = {
@@ -559,7 +559,7 @@ export class DataService {
     encounterType: any,
     fromdate: any,
     todate: any,
-    asondate: any
+    asondate: any,
   ) {
     const url = CRS_DASHBOARD_FINANCE_HOME;
     const reqBodyData = {
@@ -577,7 +577,7 @@ export class DataService {
 
   getdrilldata = (selecteddata: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_CLAIMSUMMARY_BRKUP;
     const reqBodyData = {
@@ -591,11 +591,10 @@ export class DataService {
     return this.http.post(url, reqBodyData);
   };
 
-  // //////////////////Drilldown of RCM///////////////////
-
+  // =============== DRILLDOWN OF RCM ======================
   getdrillrcmdata = (selectedValue: any, submissionLevel: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_RCMCLAIM_BRKUP;
     const reqBodyData = {
@@ -613,7 +612,7 @@ export class DataService {
   //=============================================================
   getdrilldenialdata = (selecteddata: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_RCMDENIAL_BRKUP;
     const reqBodyData = {
@@ -631,7 +630,7 @@ export class DataService {
 
   getdrilldoctors = (selecteddata: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_CLINICIANRECIVER_BRKUP;
     const reqBodyData = {
@@ -647,7 +646,7 @@ export class DataService {
 
   getdrilldoctorpies = (selecteddata: any, receiversname: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_CLINICIANRECEIVER_CPT;
     const reqBodyData = {
@@ -662,10 +661,10 @@ export class DataService {
     return this.http.post(url, reqBodyData);
   };
 
-  //////////////////// FINANCEDRILLDOWN////////////////////////
+  // =============== FINANCEDRILLDOWN ======================
   getdrillFinanceageing = (selecteddata: any) => {
     const selectedValuesString = JSON.parse(
-      sessionStorage.getItem('selectedValues')
+      sessionStorage.getItem('selectedValues') || '{}',
     );
     const url = CRS_DASHBOARD_FINANCE_AGEING;
     const reqBodyData = {
@@ -708,6 +707,7 @@ export class DataService {
     };
     return this.http.post(url, reqBodyData);
   }
+
   //=================Format the date for export pdf date=====================
   formatDate(dateStr: any) {
     // Convert the string to a Date object
@@ -776,7 +776,7 @@ export class DataService {
     datsource2: any,
     fileName: any,
     datasource1name: any,
-    datasource2name: any
+    datasource2name: any,
   ) {
     // Convert JSON to worksheet
     const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(datasource1);
@@ -855,7 +855,7 @@ export class DataService {
 
           const scale = Math.min(
             (pageWidth - 20) / imgProps.width, // fit width
-            (pageHeight - 20) / imgProps.height // fit height
+            (pageHeight - 20) / imgProps.height, // fit height
           );
 
           const imgW = imgProps.width * scale;
@@ -875,7 +875,7 @@ export class DataService {
       elements
         .reduce(
           (p, element) => p.then(() => processElement(element)),
-          Promise.resolve()
+          Promise.resolve(),
         )
         .then(() => {
           // Add timestamp footer
@@ -902,7 +902,7 @@ export class DataService {
     block: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const url = CRS_DASHBOARD_DENIAL_EXPORT;
     const reqBodyData = {
@@ -931,7 +931,7 @@ export class DataService {
     encounterType: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const url = CRS_DASHBOARD_FINANCE_EXPORT;
     const reqBodyData = {
@@ -965,7 +965,7 @@ export class DataService {
     department: any,
     category: any,
     payer: any,
-    physiciancategory: any
+    physiciancategory: any,
   ) {
     const url = CRS_DASHBOARD_PRIOR_EXPORT;
     const reqBodyData = {
@@ -989,7 +989,7 @@ export class DataService {
     dateTo: any,
     facility: any,
     department: any,
-    category: any
+    category: any,
   ) {
     const url = CRS_DASHBOARD_PRIOR_EXPORT;
     const reqBodyData = {
@@ -1012,7 +1012,7 @@ export class DataService {
     block: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const url = CRS_DASHBOARD_REVENUE_EXPORT;
     const reqBodyData = {
@@ -1041,7 +1041,7 @@ export class DataService {
     block: any,
     facility: any,
     insurance: any,
-    department: any
+    department: any,
   ) {
     const url = CRS_DASHBOARD_EANDM_EXPORT;
     const reqBodyData = {
