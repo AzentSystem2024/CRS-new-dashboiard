@@ -573,7 +573,7 @@ export class DataService {
     return this.http.post(url, reqBodyData);
   }
 
-  // //////////////////Drilldown///////////////////
+  // ============ Drilldown =============
 
   getdrilldata = (selecteddata: any) => {
     const selectedValuesString = JSON.parse(

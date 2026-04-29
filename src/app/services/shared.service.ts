@@ -1,13 +1,13 @@
 // shared.service.ts
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  private userIdSubject = new BehaviorSubject<string>('');
+ 
   private reloadComponentsSource = new Subject<void>();
   reloadComponents$ = this.reloadComponentsSource.asObservable();
 
@@ -47,22 +47,22 @@ export class SharedService {
 
   navigateToDashboard(dashboardText: any) {
     console.log(dashboardText, 'dashboardText');
-    const routes = {
-      1: '/Main-Dashboard', //denialdashboard
-      2: '/Finance-Dashboard',
-      3: '/Auth-Dashboard-Production',
-      4: '/Auth-Dashboard-Operation',
-      6: '/Revenue-Dashboard',
-      7: '/Ceo-Dashboard',
-      8: '/E&M-Dashboard',
+    const routes: Record<string, string> = {
+      '1': '/Main-Dashboard',
+      '2': '/Finance-Dashboard',
+      '3': '/Auth-Dashboard-Production',
+      '4': '/Auth-Dashboard-Operation',
+      '6': '/Revenue-Dashboard',
+      '7': '/Ceo-Dashboard',
+      '8': '/E&M-Dashboard',
     };
 
-    for (const key in routes) {
-      if (dashboardText == key) {
-        this.router.navigate([routes[key]]);
-        return;
-      }
+    const route = routes[String(dashboardText)];
+    if (route) {
+      this.router.navigate([route]);
+      return;
     }
+
     console.warn('No matching dashboard path found.');
   }
 }

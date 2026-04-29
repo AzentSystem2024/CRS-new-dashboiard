@@ -72,8 +72,8 @@ export class AuthDashboardOperationComponent implements OnInit {
   pipe = new PercentPipe('en-US');
 
   dateForm = {
-    fromdate: '',
-    todate: '',
+    fromdate: null,
+    todate: null,
   };
   vibleExportBtn: boolean = true;
   Departmentvalue: any[];
@@ -133,6 +133,36 @@ export class AuthDashboardOperationComponent implements OnInit {
     if (this.userId != 'undefined' && this.userId != '' && this.userId > '0') {
     } else {
       this.router.navigate(['/auth/login']);
+    }
+  }
+
+    // 👉 Max for FROM DATE
+  getFromMaxDate(): Date {
+    if (this.dateForm.todate) {
+      return new Date(this.dateForm.todate);
+    }
+    return new Date(); // today
+  }
+
+  // 👉 FROM DATE change
+  onFromDateChanged(e: any) {
+    const fromDate = e.value;
+    const toDate = this.dateForm.todate;
+
+    if (toDate && fromDate > new Date(toDate)) {
+      this.dateForm.fromdate = null;
+      alert('From Date cannot be greater than To Date');
+    }
+  }
+
+  // 👉 TO DATE change
+  onToDateChanged(e: any) {
+    const toDate = e.value;
+    const fromDate = this.dateForm.fromdate;
+
+    if (fromDate && toDate < new Date(fromDate)) {
+      this.dateForm.todate = null;
+      alert('To Date cannot be less than From Date');
     }
   }
 

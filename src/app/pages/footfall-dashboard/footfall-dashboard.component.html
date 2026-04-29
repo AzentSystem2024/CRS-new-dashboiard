@@ -96,7 +96,9 @@
               [editorOptions]="{
                 applyValueMode: 'instantly',
                 displayFormat: 'dd/MM/yyyy',
-                valueFormat: 'yyyy/MM/dd'
+                valueFormat: 'yyyy/MM/dd',
+                max: getFromMaxDate(),
+                onValueChanged: onFromDateChanged.bind(this),
               }"
             >
               <dxo-label text="From Date"></dxo-label>
@@ -113,7 +115,9 @@
               [editorOptions]="{
                 applyValueMode: 'instantly',
                 displayFormat: 'dd/MM/yyyy',
-                valueFormat: 'yyyy/MM/dd'
+                valueFormat: 'yyyy/MM/dd',
+                min: dateForm.fromdate || null,
+                onValueChanged: onToDateChanged.bind(this),
               }"
             >
               <dxo-label text="To Date"></dxo-label>

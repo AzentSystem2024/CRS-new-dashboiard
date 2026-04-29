@@ -26,8 +26,8 @@
                 my: 'left top',
                 at: 'left bottom',
                 of: '.dropdowncontent',
-                collision: 'fit flip'
-              }
+                collision: 'fit flip',
+              },
             }"
           >
             <div c *dxTemplate="let data of 'content'">
@@ -35,20 +35,20 @@
                 [dataSource]="modifiedFacilityDatasource"
                 [columns]="[
                   { dataField: 'ID', caption: 'Facility ID', width: 'auto' },
-                    {
-                      dataField: 'ShortName',
-                      caption: 'Short Name',
-                    },
-                    {
-                      dataField: 'Name',
-                      caption: 'FacilityName',
-                    },
-                    { dataField: 'Region', caption: 'Region', width: 'auto' },
-                    {
-                      dataField: 'ProviderType',
-                      caption: 'Provider Type',
-                      width: 'auto'
-                    }
+                  {
+                    dataField: 'ShortName',
+                    caption: 'Short Name',
+                  },
+                  {
+                    dataField: 'Name',
+                    caption: 'FacilityName',
+                  },
+                  { dataField: 'Region', caption: 'Region', width: 'auto' },
+                  {
+                    dataField: 'ProviderType',
+                    caption: 'Provider Type',
+                    width: 'auto',
+                  },
                 ]"
                 [selection]="{ mode: 'multiple' }"
                 [hoverStateEnabled]="true"
@@ -96,7 +96,8 @@
                   applyValueMode: 'instantly',
                   displayFormat: 'dd/MM/yyyy',
                   valueFormat: 'yyyy/MM/dd',
-
+                  max: getFromMaxDate(),
+                  onValueChanged: onFromDateChanged.bind(this),
                 }"
               >
                 <dxo-label text="From Date"></dxo-label>
@@ -107,13 +108,14 @@
           <div class="col-2 mt-1">
             <dx-form [formData]="dateForm" [labelMode]="'floating'">
               <dxi-item
-                editorType="dxDateBox"
                 dataField="todate"
+                editorType="dxDateBox"
                 [editorOptions]="{
                   applyValueMode: 'instantly',
                   displayFormat: 'dd/MM/yyyy',
                   valueFormat: 'yyyy/MM/dd',
-
+                  min: dateForm.fromdate || null,
+                  onValueChanged: onToDateChanged.bind(this),
                 }"
               >
                 <dxo-label text="To Date"></dxo-label>
@@ -198,7 +200,7 @@
               displayExpr="text"
               (onItemClick)="onExportClick($event)"
               [elementAttr]="{
-                class: 'export-button'
+                class: 'export-button',
               }"
             >
             </dx-drop-down-button>
@@ -437,9 +439,9 @@
                 type="discrete"
                 [position]="'bottom'"
                 [label]="{
-                rotationAngle: -70,
-                overlappingBehavior: 'rotate',
-              }"
+                  rotationAngle: -70,
+                  overlappingBehavior: 'rotate',
+                }"
               >
                 <dxo-grid [visible]="true" [opacity]="0.5"></dxo-grid>
               </dxo-argument-axis>

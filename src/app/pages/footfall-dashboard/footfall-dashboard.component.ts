@@ -60,7 +60,7 @@ export class FootfallDashboardComponent implements OnInit {
   @ViewChild('insuranceTagBox', { static: false }) insuranceTagBox: any;
 
   @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  dataGrid: DxDataGridComponent | undefined;
 
   @HostListener('window:resize')
   onResize() {
@@ -75,8 +75,8 @@ export class FootfallDashboardComponent implements OnInit {
   pipe = new PercentPipe('en-US');
 
   dateForm = {
-    fromdate: '',
-    todate: '',
+    fromdate: null,
+    todate: null,
   };
 
   chartInstance: any;
@@ -136,6 +136,36 @@ export class FootfallDashboardComponent implements OnInit {
     setTimeout(() => {
       this.get_initial_data();
     }, 500);
+  }
+
+    // 👉 Max for FROM DATE
+  getFromMaxDate(): Date {
+    if (this.dateForm.todate) {
+      return new Date(this.dateForm.todate);
+    }
+    return new Date(); // today
+  }
+
+  // 👉 FROM DATE change
+  onFromDateChanged(e: any) {
+    const fromDate = e.value;
+    const toDate = this.dateForm.todate;
+
+    if (toDate && fromDate > new Date(toDate)) {
+      this.dateForm.fromdate = null;
+      alert('From Date cannot be greater than To Date');
+    }
+  }
+
+  // 👉 TO DATE change
+  onToDateChanged(e: any) {
+    const toDate = e.value;
+    const fromDate = this.dateForm.fromdate;
+
+    if (fromDate && toDate < new Date(fromDate)) {
+      this.dateForm.todate = null;
+      alert('To Date cannot be less than From Date');
+    }
   }
 
   // ================ oncell value changed in datagrid =============
@@ -217,8 +247,8 @@ export class FootfallDashboardComponent implements OnInit {
           };
 
           this.facilityvalue = this.FacilityDataSource.filter(
-            (item) => item.Default === '1'
-          ).map((item) => item.ID);
+            (item: any) => item.Default === '1'
+          ).map((item: any) => item.ID);
         }
 
         this.get_graph_DataSource(1);
@@ -324,7 +354,7 @@ export class FootfallDashboardComponent implements OnInit {
   }
 
   // ======= chart initializing ===========
-  onChartInitialized(e) {
+  onChartInitialized(e: any) {
     this.chartInstance = e.component; // Store reference to the chart
   }
 
@@ -390,7 +420,7 @@ export class FootfallDashboardComponent implements OnInit {
   };
 
   //===================Custom label for pie chart ===========
-  customizeLabel(arg) {
+  customizeLabel(arg: any) {
     return `${arg.point.data.Percentage}%`;
   }
   // ========== DepartmentWisedataSource customize tooltip =========
@@ -426,7 +456,7 @@ export class FootfallDashboardComponent implements OnInit {
 
   //========= department showing and value prepared ========
   onMultiTagDepartmentPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.DepartmentDatasource.length;
 
     if (selectedItemsLength < totalCount) {

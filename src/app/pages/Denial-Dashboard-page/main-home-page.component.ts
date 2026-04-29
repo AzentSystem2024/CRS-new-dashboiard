@@ -64,14 +64,16 @@ import DataSource from 'devextreme/data/data_source';
     ]),
   ],
 })
+
+
 export class MainHomePageComponent implements OnInit, OnDestroy {
   @ViewChild('insuranceTagBox', { static: false }) insuranceTagBox: any;
 
   @ViewChild(DxTreeViewComponent, { static: false })
-  treeView: DxTreeViewComponent;
+  treeView: DxTreeViewComponent | undefined;
 
   @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  dataGrid: DxDataGridComponent | undefined;
 
   @HostListener('window:resize')
   onResize() {
@@ -151,8 +153,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   TopTenDoctorWiseRejectedDataSource: any;
   modifiedFacilityDatasource: any;
   dateForm = {
-    fromdate: '',
-    todate: '',
+    fromdate: null,
+    todate: null,
   };
 
   isloggedIn: any;
@@ -178,6 +180,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
       onClick: () => this.exportExcel(),
     },
   ];
+
+
   constructor(
     public service: DataService,
     private dataservice: DataService,
@@ -203,7 +207,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onInsuranceSelectionChanged(e: any) {
-    console.log(e);
     this.insuranceSelectedItems = e.selectedRowsData;
     this.insuranceValue = e.selectedRowKeys;
     this.insuranceNewValue = this.insuranceValue.map((item: any) => item.ID);
@@ -257,7 +260,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     this.insurancePopupVisible = true;
   }
 
-  onChartInitialized(e) {
+  onChartInitialized(e: any) {
     this.chartInstance = e.component;
   }
   ngOnInit(): void {
@@ -277,45 +280,45 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
 
   //=========== reorder list options to selected data to the top side ========
   reorderDataSource(selectedvalues: string, datsourceName: string) {
-    // Filter the selected items
-    const selectedItems = this[datsourceName].filter((item) =>
-      this[selectedvalues].includes(item.ID),
+    const dataSource = (this as any)[datsourceName] as any[];
+    const selectedValues = (this as any)[selectedvalues] as any[];
+
+    const selectedItems: any[] = dataSource.filter((item: any) =>
+      selectedValues.includes(item.ID),
     );
-    const nonSelectedItems = this[datsourceName].filter(
-      (item) => !this[selectedvalues].includes(item.ID),
+    const nonSelectedItems: any[] = dataSource.filter(
+      (item: any) => !selectedValues.includes(item.ID),
     );
 
     switch (selectedvalues) {
       case 'encountertypevalue':
-        this.encountertypeNewvalue = selectedItems.map((item) => item.ID);
+        this.encountertypeNewvalue = selectedItems.map((item: any) => item.ID);
         break;
       case 'denialcategoryvalue':
-        this.denialcategoryNewvalue = selectedItems.map((item) => item.ID);
+        this.denialcategoryNewvalue = selectedItems.map((item: any) => item.ID);
         break;
       case 'blockValue':
-        this.blockNewValue = selectedItems.map((item) => item.ID);
+        this.blockNewValue = selectedItems.map((item: any) => item.ID);
         break;
       case 'departmentValue':
-        this.departmentNewValue = selectedItems.map((item) => item.ID);
+        this.departmentNewValue = selectedItems.map((item: any) => item.ID);
         break;
     }
 
-    nonSelectedItems.sort((a, b) => a.Name.localeCompare(b.Name));
-    this[datsourceName] = [...selectedItems, ...nonSelectedItems];
+    nonSelectedItems.sort((a: any, b: any) => a.Name.localeCompare(b.Name));
+    (this as any)[datsourceName] = [...selectedItems, ...nonSelectedItems];
   }
 
   //===========Function to handle selection change and sort the data==========
   onSelectionChanged(event: any, jsonData: any[], dataSourceKey: string): void {
-    console.log('Original JSON Data:', jsonData);
-    const selectedRows = event.selectedRowsData;
-    const selectedRowIds = selectedRows.map((row) => row.ID);
+    const selectedRows = event.selectedRowsData as any[];
+    const selectedRowIds = selectedRows.map((row: any) => row.ID);
     const unselectedRows = jsonData.filter(
-      (row) => !selectedRowIds.includes(row.ID),
+      (row: any) => !selectedRowIds.includes(row.ID),
     );
     const reorderedData = [...selectedRows, ...unselectedRows];
-    this[dataSourceKey] = this.makeAsyncDataSourceFromJson(reorderedData);
-    console.log('Updated DataSource:', this[dataSourceKey]);
-    this.dataGrid.instance.refresh();
+    (this as any)[dataSourceKey] = this.makeAsyncDataSourceFromJson(reorderedData);
+    this.dataGrid?.instance.refresh();
   }
 
   // ======================== X-Axis value rotated and value custom==============
@@ -329,7 +332,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     return `${firstLine}\n${secondLine}`;
   };
   //===================Custom label for pie chart ===========
-  customizeLabel(arg) {
+  customizeLabel(arg: any) {
     const value = arg.valueText;
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(2)}M (${arg.percentText})`;
@@ -367,7 +370,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
   //======================top 10 code tooltip===================
   top10CodeDataCustomizeTooltip(arg: any) {
-    console.log('arg data', arg);
     return {
       text: `${arg.point.data.CPTName}`,
     };
@@ -450,10 +452,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
 
   //tagbox
   onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.EncountrTypeDatasource.length;
-    console.log(selectedItemsLength, 'selecteditemslength');
-    console.log(totalCount, 'total count');
     if (selectedItemsLength < totalCount) {
       this.encountertypeNewvalue = this.encountertypevalue;
       args.cancel = true;
@@ -464,7 +464,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagBlockPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.blockDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -477,7 +477,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagDepartmentPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.departmentDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -490,7 +490,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagInsurancePreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.insuranceDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -505,11 +505,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   onMultiTagDenialCategoryPreparing(
     args: DxTagBoxTypes.MultiTagPreparingEvent,
   ) {
-    const selectedItemsLength = args.selectedItems.length;
-    console.log(selectedItemsLength, 'selectedItemsLength');
+    const selectedItemsLength:any = args.selectedItems?.length;
     const totalCount = this.DenailCategoryDatasource.length;
-    console.log(totalCount, 'total count');
-
     if (selectedItemsLength < totalCount) {
       this.denialcategoryNewvalue = this.denialcategoryvalue;
       args.cancel = true;
@@ -519,12 +516,34 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  //===============Format the date fetch from date picker of ui ==================
-  private formatDate(date: Date): string {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString().substr(-4);
-    return `${year}/${month}/${day}`;
+    // 👉 Max for FROM DATE
+  getFromMaxDate(): Date {
+    if (this.dateForm.todate) {
+      return new Date(this.dateForm.todate);
+    }
+    return new Date(); // today
+  }
+
+  // 👉 FROM DATE change
+  onFromDateChanged(e: any) {
+    const fromDate = e.value;
+    const toDate = this.dateForm.todate;
+
+    if (toDate && fromDate > new Date(toDate)) {
+      this.dateForm.fromdate = null;
+      alert('From Date cannot be greater than To Date');
+    }
+  }
+
+  // 👉 TO DATE change
+  onToDateChanged(e: any) {
+    const toDate = e.value;
+    const fromDate = this.dateForm.fromdate;
+
+    if (fromDate && toDate < new Date(fromDate)) {
+      this.dateForm.todate = null;
+      alert('To Date cannot be less than From Date');
+    }
   }
 
   //================== Initial Data ========================
@@ -580,8 +599,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
           this.RejectionIndexDatasource.find((obj: any) => obj.Default === '1')
             ?.ID || ' ';
         this.facilityvalue = this.FacilityDataSource.filter(
-          (item) => item.Default === '1',
-        ).map((item) => item.ID);
+          (item: any) => item.Default === '1',
+        ).map((item: any) => item.ID);
       }
       this.get_graph_DataSource(1); // Opened
     });
@@ -592,7 +611,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     const startTime = performance.now();
     this.showGroups = false;
     this.loadingVisible = true;
-
 
     const { fromdate, todate } = this.dateForm;
 
@@ -644,7 +662,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
           this.RejectionAccountabilityDataSource = response.AccountabilityWise;
 
           this.ToptenInsuranceRejectedDataSource = response.InsuranceWise.map(
-            (insurance) => {
+            (insurance: any) => {
               if (!insurance.InsuranceShortName) {
                 const nameParts = insurance.InsuranceName.split(' ');
                 return {
@@ -660,7 +678,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
           this.TopTenCodeRejectedDataSource = response.CodeWise;
           this.TopTenDepartmentWiseRejectedDataSource = response.DepartmentWise;
           this.TopTenDoctorWiseRejectedDataSource = response.ClinicianWise.map(
-            (clinician) => {
+            (clinician: any) => {
               if (!clinician.ClinicianShortName && clinician.ClinicianName) {
                 const nameParts = clinician.ClinicianName.trim().split(/\s+/);
                 clinician.ClinicianShortName = nameParts.slice(0, 2).join(' ');
@@ -705,12 +723,11 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     this.get_graph_DataSource(8); // Refreshed
   }
 
-  onExportClick(e) {}
+ 
 
   //==================== Export to PDF ====================
   export() {
     this.exportLoadingVisible = true;
-
     const exportDiv1 = document.querySelector('.ExportDiv1') as HTMLElement;
     const exportDiv2 = document.querySelector('.ExportDiv2') as HTMLElement;
     const exportDiv3 = document.querySelector('.ExportDiv3') as HTMLElement;
@@ -729,7 +746,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
         exportDiv4,
         exportDiv5,
         exportDiv6,
-
       ])
       .then(() => {
         this.exportLoadingVisible = false;

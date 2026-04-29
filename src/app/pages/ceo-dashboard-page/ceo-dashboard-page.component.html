@@ -14,7 +14,8 @@
                 applyValueMode: 'instantly',
                 displayFormat: 'dd/MM/yyyy',
                 valueFormat: 'yyyy/MM/dd',
-
+                max: getFromMaxDate(),
+                onValueChanged: onFromDateChanged.bind(this),
               }"
             >
               <dxo-label text="From Date"></dxo-label>
@@ -25,13 +26,14 @@
         <div class="col-2 mt-2">
           <dx-form [formData]="dateForm" [labelMode]="'floating'">
             <dxi-item
-              editorType="dxDateBox"
               dataField="todate"
+              editorType="dxDateBox"
               [editorOptions]="{
                 applyValueMode: 'instantly',
                 displayFormat: 'dd/MM/yyyy',
                 valueFormat: 'yyyy/MM/dd',
-
+                min: dateForm.fromdate || null,
+                onValueChanged: onToDateChanged.bind(this),
               }"
             >
               <dxo-label text="To Date"></dxo-label>
