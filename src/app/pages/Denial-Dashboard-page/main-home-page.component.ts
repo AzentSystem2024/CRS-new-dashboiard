@@ -317,7 +317,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
       (row: any) => !selectedRowIds.includes(row.ID),
     );
     const reorderedData = [...selectedRows, ...unselectedRows];
-    (this as any)[dataSourceKey] = this.makeAsyncDataSourceFromJson(reorderedData);
+    (this as any)[dataSourceKey] =
+      this.makeAsyncDataSourceFromJson(reorderedData);
     this.dataGrid?.instance.refresh();
   }
 
@@ -452,7 +453,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
 
   //tagbox
   onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength:any = args.selectedItems?.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     const totalCount = this.EncountrTypeDatasource.length;
     if (selectedItemsLength < totalCount) {
       this.encountertypeNewvalue = this.encountertypevalue;
@@ -464,7 +465,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagBlockPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength:any = args.selectedItems?.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     const totalCount = this.blockDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -477,7 +478,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagDepartmentPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength:any = args.selectedItems?.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     const totalCount = this.departmentDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -490,7 +491,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagInsurancePreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength:any = args.selectedItems?.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     const totalCount = this.insuranceDataSource.length;
 
     if (selectedItemsLength < totalCount) {
@@ -505,7 +506,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   onMultiTagDenialCategoryPreparing(
     args: DxTagBoxTypes.MultiTagPreparingEvent,
   ) {
-    const selectedItemsLength:any = args.selectedItems?.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     const totalCount = this.DenailCategoryDatasource.length;
     if (selectedItemsLength < totalCount) {
       this.denialcategoryNewvalue = this.denialcategoryvalue;
@@ -516,7 +517,7 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
     }
   }
 
-    // 👉 Max for FROM DATE
+  // 👉 Max for FROM DATE
   getFromMaxDate(): Date {
     if (this.dateForm.todate) {
       return new Date(this.dateForm.todate);
@@ -722,8 +723,6 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
   applyButtonClicked() {
     this.get_graph_DataSource(8); // Refreshed
   }
-
- 
 
   //==================== Export to PDF ====================
   export() {

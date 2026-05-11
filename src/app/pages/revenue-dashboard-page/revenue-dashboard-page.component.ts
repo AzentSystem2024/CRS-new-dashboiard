@@ -65,10 +65,10 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
   insuranceTagBox!: DxTagBoxComponent;
 
   @ViewChild(DxTreeViewComponent, { static: false })
-  treeView: DxTreeViewComponent;
+  treeView: DxTreeViewComponent | undefined;
 
   @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  dataGrid: DxDataGridComponent | undefined;
 
   @HostListener('window:resize')
   onResize() {
@@ -614,7 +614,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     }
   }
 
-    // 👉 Max for FROM DATE
+  // 👉 Max for FROM DATE
   getFromMaxDate(): Date {
     if (this.dateForm.todate) {
       return new Date(this.dateForm.todate);
