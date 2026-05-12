@@ -654,6 +654,8 @@ export class MainHomePageComponent implements OnInit, OnDestroy {
           this.deniedPrcnt = cardData.RejectedPercent;
           this.balanceAmt = this.formatAmount(cardData.BalanceAmount);
           this.balancePrcnt = cardData.BalancePercent;
+          this.remittancePrcnt = cardData.RemittedPercent;
+          this.rejectionPrcnt = cardData.RejectedPercent;
 
           this.RemittanceRejectionPercentDatasource = response.MonthWise;
           this.CaseTypeRejectionDataSource = response.CaseWise;
