@@ -373,14 +373,25 @@ export class DataService {
   //================ Loading Tabs Data for mainDashboardLayout =====================
   fetch_tab_Data_mainLayout() {
     const UserID = sessionStorage.getItem('paramsid');
+
+    console.log('Fetching tab data for main dashboard layout');
+    console.log('UserID:', UserID);
     const url = CRS_DASHBOARD_TABS_DATA;
-    const reqBody = { UserID: UserID, Trial: '1' };
-    return this.http.post(url, reqBody);
+    const reqBody = {
+      UserID: UserID,
+      Trial: '1',
+    };
+    console.log('Request URL:', url);
+    console.log('Request Body:', JSON.stringify(reqBody, null, 2));
+
+    return this.http.post(url, JSON.stringify(reqBody), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   // ================================================================================
-  // ================================================================================
-
   //=============Grouping of higher amound values===========
   formatNumberWithCommas(number: any): any {
     const [integerPart, fractionalPart] = number.toString().split('.');

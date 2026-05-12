@@ -45,196 +45,218 @@ export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
   @ViewChild(DxScrollViewComponent, { static: true })
   scrollView!: DxScrollViewComponent;
 
-  @Input()
-  title!: string;
+  @Input() title!: string;
 
   selectedRoute = '';
-
-  menuOpened!: boolean;
-
-  opportunities: SalesOrOpportunitiesByCategory = null;
-  sales: Sales = null;
-
+  menuOpened = false;
   temporaryMenuOpened = false;
 
-  menuMode: DxDrawerTypes.OpenedStateMode = 'shrink';
+  // opportunities: SalesOrOpportunitiesByCategory = null;
+  // sales: Sales = null;
 
+  menuMode: DxDrawerTypes.OpenedStateMode = 'shrink';
   menuRevealMode: DxDrawerTypes.RevealMode = 'expand';
 
   minMenuSize = 0;
-  currentUrl: any;
-  segment: any;
-
   shaderEnabled = false;
 
-  tabs: any;
+  tabs: any[] = [];
+  selectedIndex = 0;
+  orientation: any = 'horizontal';
 
-  selectedIndex: any = 0;
+  currentRoute: string;
+  userId: string | null = null;
+  tabdataavailable = false;
 
-  orientation: any = 'horizonal';
+  routerSubscription!: Subscription;
+  screenSubscription!: Subscription;
+  applyButtonSubscription!: Subscription;
 
-  routerSubscription: Subscription;
-
-  screenSubscription: Subscription;
-
-  private applyButtonSubscription: Subscription;
-  userId: any;
-  showHeadersDiv: boolean;
-  currentRoute: any;
-  tabdataavailable: boolean = false;
+  private readonly routes: Record<number, string> = {
+    1: '/Main-Dashboard',
+    2: '/Finance-Dashboard',
+    3: '/Auth-Dashboard-Production',
+    4: '/Auth-Dashboard-Operation',
+    6: '/Revenue-Dashboard',
+    7: '/Ceo-Dashboard',
+    8: '/E&M-Dashboard',
+    9: '/Footfall-Dashboard',
+  };
 
   constructor(
     public service: DataService,
     private screen: ScreenService,
     private router: Router,
     public appInfo: AppInfoService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.currentRoute = this.router.url;
   }
-  //=================== On Init Iunction =================
-  ngOnInit() {
-    this.on_Load_tab_data();
+
+  //=================== On Init ===================
+  ngOnInit(): void {
+    this.loadTabData();
   }
 
-  //================== Tab data fetching ===================
-  on_Load_tab_data() {
-    this.route.queryParams.subscribe((params: Params) => {
-      this.tabdataavailable = true;
-      const queryUserId = params['userId'];
-      this.userId =
-        queryUserId && queryUserId !== 'undefined' && queryUserId !== null
-          ? queryUserId
-          : sessionStorage.getItem('paramsid');
+  //=================== Load Tab Data ===================
+  loadTabData(): void {
+    this.route.queryParams.subscribe({
+      next: (params: Params) => {
+        const queryUserId = params['userId'];
 
-      if (this.userId) {
+        this.userId =
+          queryUserId && queryUserId !== 'undefined'
+            ? queryUserId
+            : sessionStorage.getItem('paramsid');
+
+        if (!this.userId) {
+          return;
+        }
+
         sessionStorage.setItem('paramsid', this.userId);
 
-        this.service.fetch_tab_Data_mainLayout().subscribe((response: any) => {
-          if (response.flag === '1') {
-            this.tabs = response.dashboards;
-            if (this.tabs.length > 0) {
-              this.tabdataavailable = true;
-              this.selectedIndex = 0;
-              this.navigateToDashboard(this.tabs[0].ID);
-            } else {
-              this.tabdataavailable = false;
-            }
-          }
-        });
-      }
+        this.handleLoginSession();
+        this.fetchDashboardTabs();
+      },
+      error: (err) => {
+        console.error('Query params error:', err);
+      },
     });
+  }
 
+  //=================== Login Session ===================
+  private handleLoginSession(): void {
     const paramsId = sessionStorage.getItem('paramsid');
-    const SessionID = sessionStorage.getItem('SessionID');
+    const sessionId = sessionStorage.getItem('SessionID');
 
-    // Call login if either is missing
-    if (!paramsId || !SessionID) {
-      const userName = this.userId;
-      const password = '';
-      if (userName) {
-        this.service.dashboard_Params_Demo_Login(userName, password).subscribe({
-          next: (res: any) => {
-            console.log('Login API called');
-            // Store SessionID if available
-            if (res?.SessionID) {
-              sessionStorage.setItem('SessionID', res.SessionID);
-            }
-          },
-          error: (err) => console.error('Login API error:', err),
-        });
-      }
+    // Skip login if already exists
+    if (paramsId && sessionId) {
+      return;
+    }
+
+    this.service.dashboard_Params_Demo_Login(this.userId, '').subscribe({
+      next: (res: any) => {
+        console.log('Login API called');
+
+        if (res?.SessionID) {
+          sessionStorage.setItem('SessionID', res.SessionID);
+        }
+      },
+      error: (err) => {
+        console.error('Login API error:', err);
+      },
+    });
+  }
+
+  //=================== Fetch Tabs ===================
+  private fetchDashboardTabs(): void {
+    this.service.fetch_tab_Data_mainLayout().subscribe({
+      next: (response: any) => {
+        if (response?.flag !== '1') {
+          this.tabdataavailable = false;
+          return;
+        }
+
+        console.log('Dashboard data fetched successfully:', response);
+
+        this.tabs = response?.dashboards || [];
+        this.tabdataavailable = this.tabs.length > 0;
+
+        if (this.tabdataavailable) {
+          this.selectedIndex = 0;
+          this.navigateToDashboard(this.tabs[0].ID);
+        }
+      },
+      error: (err) => {
+        console.error('Dashboard fetch error:', err);
+        this.tabdataavailable = false;
+      },
+    });
+  }
+
+  //=================== Navigate Dashboard ===================
+  navigateToDashboard(dashboardId: number): void {
+    const route = this.routes[dashboardId];
+
+    if (route) {
+      this.router.navigate([route]);
+    } else {
+      console.warn('No matching dashboard path found.');
     }
   }
 
-  navigateToDashboard(dashboardText: any) {
-    const routes = {
-      2: '/Finance-Dashboard',
-      1: '/Main-Dashboard',
-      3: '/Auth-Dashboard-Production',
-      4: '/Auth-Dashboard-Operation',
-      6: '/Revenue-Dashboard',
-      7: '/Ceo-Dashboard',
-      8: '/E&M-Dashboard',
-      9: '/Footfall-Dashboard',
-    };
+  //=================== Tab Change ===================
+  onTabChanged(event: any): void {
+    const dashboardId = event?.itemData?.ID;
 
-    for (const key in routes) {
-      if (dashboardText == key) {
-        // sessionStorage.setItem('dashboardId', key);
-        this.router.navigate([routes[key]]);
-        return;
-      }
+    if (dashboardId) {
+      this.navigateToDashboard(dashboardId);
     }
-    console.warn('No matching dashboard path found.');
   }
 
-  //====================Tab Clicke Event====================
-  onTabChanged(event: any) {
-    const dashboardText: any = event.itemData.ID;
-    this.navigateToDashboard(dashboardText);
-  }
-  //==========================================================
+  //=================== Current URL Segment ===================
   getCurrentSegmentFromUrl(): string {
-    // Get the current URL from the browser
-    const currentUrl = window.location.href;
-    // Split the URL by '/'
-    const urlParts = currentUrl.split('/');
-    // Find the last part of the URL
-    const lastPart = urlParts[urlParts.length - 1];
-    // Remove any query parameters
-    const segment = lastPart.split('?')[0];
-    return segment;
+    return window.location.href.split('/').pop()?.split('?')[0] || '';
   }
 
+  //=================== Destroy ===================
   ngOnDestroy(): void {
-    this.routerSubscription.unsubscribe();
-    this.screenSubscription.unsubscribe();
-    // alert('Component function called');
-    this.applyButtonSubscription.unsubscribe();
+    this.routerSubscription?.unsubscribe();
+    this.screenSubscription?.unsubscribe();
+    this.applyButtonSubscription?.unsubscribe();
   }
 
-  updateDrawer() {
+  //=================== Drawer Update ===================
+  updateDrawer(): void {
     const isXSmall = this.screen.sizes['screen-x-small'];
     const isLarge = this.screen.sizes['screen-large'];
+
     this.menuMode = isLarge ? 'shrink' : 'overlap';
     this.menuRevealMode = isXSmall ? 'slide' : 'expand';
     this.minMenuSize = isXSmall ? 0 : 48;
     this.shaderEnabled = !isLarge;
   }
 
-  get hideMenuAfterNavigation() {
+  //=================== Getters ===================
+  get hideMenuAfterNavigation(): boolean {
     return this.menuMode === 'overlap' || this.temporaryMenuOpened;
   }
 
-  get showMenuAfterClick() {
+  get showMenuAfterClick(): boolean {
     return !this.menuOpened;
   }
 
-  navigationChanged(event: DxTreeViewTypes.ItemClickEvent) {
-    const path = (event.itemData as any).path;
+  //=================== Navigation Change ===================
+  navigationChanged(event: DxTreeViewTypes.ItemClickEvent): void {
+    const path = (event.itemData as any)?.path;
     const pointerEvent = event.event;
-    if (path && this.menuOpened) {
-      if (event.node?.selected) {
-        pointerEvent?.preventDefault();
-      } else {
-        this.router.navigate([path]);
-      }
-      if (this.hideMenuAfterNavigation) {
-        this.temporaryMenuOpened = false;
-        this.menuOpened = false;
-        pointerEvent?.stopPropagation();
-      }
-    } else {
+
+    if (!path || !this.menuOpened) {
       pointerEvent?.preventDefault();
+      return;
+    }
+
+    if (event.node?.selected) {
+      pointerEvent?.preventDefault();
+    } else {
+      this.router.navigate([path]);
+    }
+
+    if (this.hideMenuAfterNavigation) {
+      this.temporaryMenuOpened = false;
+      this.menuOpened = false;
+      pointerEvent?.stopPropagation();
     }
   }
 
-  navigationClick() {
-    if (this.showMenuAfterClick) {
-      this.temporaryMenuOpened = true;
-      this.menuOpened = true;
+  //=================== Navigation Click ===================
+  navigationClick(): void {
+    if (!this.showMenuAfterClick) {
+      return;
     }
+
+    this.temporaryMenuOpened = true;
+    this.menuOpened = true;
   }
 }
 

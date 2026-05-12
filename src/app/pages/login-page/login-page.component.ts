@@ -36,7 +36,7 @@ export class LoginPageComponent {
     private router: Router,
     private service: DataService,
     private sharedServc: SharedService,
-    private customReuse: CustomReuseStrategy
+    private customReuse: CustomReuseStrategy,
   ) {
     this.customReuse.clearStoredData();
     this.loginpage = {
@@ -44,9 +44,10 @@ export class LoginPageComponent {
       Password: null,
     };
   }
+
   onEnterUserName = () => {
     const passwordBox = document.querySelector(
-      '[name="Password"]'
+      '[name="Password"]',
     ) as HTMLElement;
     if (passwordBox) {
       passwordBox.focus();
@@ -57,57 +58,82 @@ export class LoginPageComponent {
     this.Login();
   };
 
-  Login() {
-    this.loadingVisible = true;
-    const userName = this.loginpage.UserName;
-    const password = this.loginpage.Password;
-    if (userName && password) {
-      this.service
-        .dashboard_Login(userName, password)
-        .subscribe((response: any) => {
-          if (response.flag === '1') {
-            // notify(`${response.message}`, 'success', 3000);
+  Login(): void {
+    const { UserName: userName, Password: password } = this.loginpage;
 
-            const loginId = response.LoginID;
-            const userid = response.userid;
-            const SessionID = response.SessionID;
-            sessionStorage.setItem('paramsid', loginId);
-            sessionStorage.setItem('userID', userid);
-            sessionStorage.setItem('SessionID', SessionID);
-            sessionStorage.setItem('isLogging', 'true');
-            this.loadingVisible = false;
-            // Ensure session storage is completely set before navigating
-            setTimeout(() => {
-              const userID = sessionStorage.getItem('paramsid');
-
-              if (userID && userID !== 'undefined') {
-                this.service
-                  .fetch_tab_Data_mainLayout()
-                  .subscribe((response: any) => {
-                    if (response.flag === '1') {
-                      this.tabs = response.dashboards;
-
-                      if (this.tabs.length > 0) {
-                        const firstTabText = this.tabs[0].ID;
-                        this.sharedServc.navigateToDashboard(firstTabText);
-                      } else if (this.tabs.length === 0) {
-                        this.router.navigate(['/Empty-message-page']);
-                      }
-                    }
-                  });
-              } else {
-                console.error('UserID not found in sessionStorage');
-              }
-            }, 100); // Reduced timeout to 100ms
-          } else {
-            this.loadingVisible = false;
-            notify(`${response.message}`, 'error', 3000);
-          }
-        });
-    } else {
-      this.loadingVisible = false;
+    //================ Validate Fields =================
+    if (!userName || !password) {
       alert('Please fill all the fields');
+      return;
     }
+
+    this.loadingVisible = true;
+
+    //================ Login API =================
+    this.service.dashboard_Login(userName, password).subscribe({
+      next: (response: any) => {
+        if (response?.flag !== '1') {
+          this.loadingVisible = false;
+          notify(response?.message || 'Login failed', 'error', 3000);
+          return;
+        }
+
+        //================ Store Session =================
+        const { LoginID, userid, SessionID } = response;
+
+        sessionStorage.setItem('paramsid', LoginID);
+        sessionStorage.setItem('userID', userid);
+        sessionStorage.setItem('SessionID', SessionID);
+        sessionStorage.setItem('isLogging', 'true');
+
+        //================ Fetch Dashboard Tabs =================
+        this.loadDashboardTabs();
+      },
+
+      error: (err) => {
+        console.error('Login API Error:', err);
+        this.loadingVisible = false;
+        notify('Something went wrong. Please try again.', 'error', 3000);
+      },
+    });
+  }
+
+  //================ Load Dashboard Tabs =================
+  private loadDashboardTabs(): void {
+    const userID = sessionStorage.getItem('paramsid');
+
+    if (!userID || userID === 'undefined') {
+      console.error('UserID not found in sessionStorage');
+      this.loadingVisible = false;
+      return;
+    }
+
+    this.service.fetch_tab_Data_mainLayout().subscribe({
+      next: (response: any) => {
+        this.loadingVisible = false;
+
+        if (response?.flag !== '1') {
+          notify('Failed to load dashboards', 'error', 3000);
+          return;
+        }
+
+        console.log('Dashboard data fetched successfully:', response);
+
+        this.tabs = response?.dashboards || [];
+
+        if (this.tabs.length > 0) {
+          this.sharedServc.navigateToDashboard(this.tabs[0].ID);
+        } else {
+          this.router.navigate(['/Empty-message-page']);
+        }
+      },
+
+      error: (err) => {
+        console.error('Dashboard Fetch Error:', err);
+        this.loadingVisible = false;
+        notify('Unable to load dashboard data', 'error', 3000);
+      },
+    });
   }
 }
 @NgModule({
