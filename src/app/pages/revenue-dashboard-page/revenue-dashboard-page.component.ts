@@ -187,7 +187,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) {}
 
-  onChartInitialized(e) {
+  onChartInitialized(e: any) {
     this.chartInstance = e.component;
   }
 
@@ -195,7 +195,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.get_initial_data();
     }, 500);
-    this.draggableFunction('dragg1');
+    // this.draggableFunction('dragg1');
   }
 
   ngOnDestroy(): void {
@@ -313,70 +313,70 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     this.isZoomedInChart1 = false;
   }
 
-  draggableFunction(containerId: string): void {
-    const container = document.getElementById(containerId); // Parent container (e.g., a row of items)
-    if (!container) {
-      console.error(`Container with ID '${containerId}' not found`);
-      return;
-    }
+  // draggableFunction(containerId: string): void {
+  //   const container = document.getElementById(containerId); // Parent container (e.g., a row of items)
+  //   if (!container) {
+  //     console.error(`Container with ID '${containerId}' not found`);
+  //     return;
+  //   }
 
-    const draggables = container.querySelectorAll('.ChartContent'); // Select only items within the current row
-    if (!draggables.length) {
-      console.error(
-        `No draggable elements found in container '${containerId}'`,
-      );
-      return;
-    }
+  //   const draggables = container.querySelectorAll(
+  //     '.ChartContent',
+  //   ) as NodeListOf<HTMLElement>; // Select only items within the current row
+  //   if (!draggables.length) {
+  //     console.error(
+  //       `No draggable elements found in container '${containerId}'`,
+  //     );
+  //     return;
+  //   }
 
-    // Add dragstart event to each draggable item
-    draggables.forEach((item) => {
-      item.addEventListener('dragstart', (e: DragEvent) => {
-        if (e.dataTransfer) {
-          e.dataTransfer.setData('text/plain', (e.target as HTMLElement).id);
-        }
-      });
-    });
+  //   // Add dragstart event to each draggable item
+  //   draggables.forEach((item) => {
+  //     item.addEventListener('dragstart', (e: DragEvent) => {
+  //       if (e.dataTransfer) {
+  //         e.dataTransfer.setData('text/plain', (e.target as HTMLElement).id);
+  //       }
+  //     });
+  //   });
 
-    // Add dragover event to allow dropping within the current container
-    container.addEventListener('dragover', (e: DragEvent) => {
-      e.preventDefault();
-    });
+  //   // Add dragover event to allow dropping within the current container
+  //   container.addEventListener('dragover', (e: DragEvent) => {
+  //     e.preventDefault();
+  //   });
 
-    // Add drop event to handle reordering within the same container
-    container.addEventListener('drop', (e: DragEvent) => {
-      e.preventDefault();
+  //   // Add drop event to handle reordering within the same container
+  //   container.addEventListener('drop', (e: DragEvent) => {
+  //     e.preventDefault();
 
-      const draggedId = e.dataTransfer?.getData('text/plain');
-      const draggedElement = document.getElementById(draggedId || '');
-      const targetElement = (e.target as HTMLElement).closest('.ChartContent'); // Ensure the correct item is targeted
+  //     const draggedId = e.dataTransfer?.getData('text/plain');
+  //     const draggedElement = document.getElementById(draggedId || '');
+  //     const targetElement = (e.target as HTMLElement).closest('.ChartContent'); // Ensure the correct item is targeted
 
-      // Ensure both dragged and target elements belong to the same container
-      if (
-        draggedElement &&
-        targetElement &&
-        targetElement.id !== draggedElement.id &&
-        container.contains(draggedElement) &&
-        container.contains(targetElement)
-      ) {
-        const children = Array.from(container.children); // Get all children of the current container
+  //     // Ensure both dragged and target elements belong to the same container
+  //     if (
+  //       draggedElement &&
+  //       targetElement &&
+  //       targetElement.id !== draggedElement.id &&
+  //       container.contains(draggedElement) &&
+  //       container.contains(targetElement)
+  //     ) {
+  //       const children = Array.from(container.children); // Get all children of the current container
 
-        const draggedIndex = children.indexOf(draggedElement);
-        const targetIndex = children.indexOf(targetElement);
+  //       const draggedIndex = children.indexOf(draggedElement);
+  //       const targetIndex = children.indexOf(targetElement);
 
-        // Reorder elements based on drag direction
-        if (draggedIndex < targetIndex) {
-          container.insertBefore(draggedElement, targetElement.nextSibling);
-        } else {
-          container.insertBefore(draggedElement, targetElement);
-        }
-      }
-    });
-  }
-
-  //tag-box
+  //       // Reorder elements based on drag direction
+  //       if (draggedIndex < targetIndex) {
+  //         container.insertBefore(draggedElement, targetElement.nextSibling);
+  //       } else {
+  //         container.insertBefore(draggedElement, targetElement);
+  //       }
+  //     }
+  //   });
+  // }
 
   onMultiTagEncounterTypePreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     console.log(selectedItemsLength, 'selectedItemsLength');
     const totalCount = this.EncountrTypeDatasource.length;
     console.log(totalCount, 'total count');
@@ -391,7 +391,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagBlockPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     console.log(selectedItemsLength, 'selectedItemsLength');
     const totalCount = this.BlockWiseRejectionDataSource.length;
     console.log(totalCount, 'total count');
@@ -406,7 +406,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
   }
 
   onMultiTagDepartmentPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     console.log(selectedItemsLength, 'selectedItemsLength');
     const totalCount = this.departmentDataSource.length;
     console.log(totalCount, 'total count');
@@ -422,7 +422,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
 
   onMultiTagInsurancePreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
     console.log('hiiiiiiiiiiiiii');
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength: any = args.selectedItems?.length;
     console.log(selectedItemsLength, 'selectedItemsLength');
     const totalCount = this.insuranceDataSource.length;
     console.log(totalCount, 'total count');
@@ -444,41 +444,42 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
   //=========== reorder list options to selected data to the top side ========
   reorderDataSource(selectedvalues: string, datsourceName: string) {
     // Filter the selected items
-    const selectedItems = this[datsourceName].filter((item) =>
-      this[selectedvalues].includes(item.ID),
+    const selectedItems = (this as any)[datsourceName].filter((item: any) =>
+      (this as any)[selectedvalues].includes(item.ID),
     );
-    const nonSelectedItems = this[datsourceName].filter(
-      (item) => !this[selectedvalues].includes(item.ID),
+    const nonSelectedItems = (this as any)[datsourceName].filter(
+      (item: any) => !(this as any)[selectedvalues].includes(item.ID),
     );
 
     switch (selectedvalues) {
       case 'blockValue':
-        this.blockNewValue = selectedItems.map((item) => item.ID);
+        this.blockNewValue = selectedItems.map((item: any) => item.ID);
         break;
       case 'encountertypevalue':
-        this.encountertypeNewvalue = selectedItems.map((item) => item.ID);
+        this.encountertypeNewvalue = selectedItems.map((item: any) => item.ID);
         break;
       case 'departmentValue':
-        this.departmentNewValue = selectedItems.map((item) => item.ID);
+        this.departmentNewValue = selectedItems.map((item: any) => item.ID);
         break;
     }
 
-    nonSelectedItems.sort((a, b) => a.Name.localeCompare(b.Name));
-    this[datsourceName] = [...selectedItems, ...nonSelectedItems];
+    nonSelectedItems.sort((a: any, b: any) => a.Name.localeCompare(b.Name));
+    (this as any)[datsourceName] = [...selectedItems, ...nonSelectedItems];
   }
 
   //===========Function to handle selection change and sort the data==========
   onSelectionChanged(event: any, jsonData: any[], dataSourceKey: string): void {
     console.log('Original JSON Data:', jsonData);
     const selectedRows = event.selectedRowsData;
-    const selectedRowIds = selectedRows.map((row) => row.ID);
+    const selectedRowIds = selectedRows.map((row: any) => row.ID);
     const unselectedRows = jsonData.filter(
       (row) => !selectedRowIds.includes(row.ID),
     );
     const reorderedData = [...selectedRows, ...unselectedRows];
-    this[dataSourceKey] = this.makeAsyncDataSourceFromJson(reorderedData);
-    console.log('Updated DataSource:', this[dataSourceKey]);
-    this.dataGrid.instance.refresh();
+    (this as any)[dataSourceKey] =
+      this.makeAsyncDataSourceFromJson(reorderedData);
+    console.log('Updated DataSource:', (this as any)[dataSourceKey]);
+    this.dataGrid?.instance.refresh();
   }
 
   // ======================== X-Axis value rotated and value custom==============
@@ -493,7 +494,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
   };
 
   //===================Custom label for pie chart ===========
-  customizeLabel(arg) {
+  customizeLabel(arg: any) {
     const value = arg.valueText;
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(2)}M (${arg.percentText})`;
@@ -536,6 +537,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
       text: `${arg.point.data.CPTName}`,
     };
   }
+
   //======================top 10 facility tooltip===================
   top10FacilityDataCustomizeTooltip(arg: any) {
     return {
@@ -556,6 +558,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
       text: `${arg.point.data.Department}`,
     };
   }
+
   //======================Denial Category tooltip===================
   DenialCategoryDataCustomizeTooltip(arg: any) {
     return {
@@ -568,6 +571,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
       text: `${arg.point.data.Block}`,
     };
   }
+
   //======================rejection acountability tooltip===================
   RejectionAccountabilityDataCustomizeTooltip(arg: any) {
     return {
@@ -614,7 +618,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 👉 Max for FROM DATE
+  // Max for FROM DATE
   getFromMaxDate(): Date {
     if (this.dateForm.todate) {
       return new Date(this.dateForm.todate);
@@ -622,7 +626,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     return new Date(); // today
   }
 
-  // 👉 FROM DATE change
+  // FROM DATE change
   onFromDateChanged(e: any) {
     const fromDate = e.value;
     const toDate = this.dateForm.todate;
@@ -633,7 +637,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 👉 TO DATE change
+  // TO DATE change
   onToDateChanged(e: any) {
     const toDate = e.value;
     const fromDate = this.dateForm.fromdate;
@@ -698,20 +702,20 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
           this.RejectionIndexDatasource.find((obj: any) => obj.Default === '1')
             ?.ID || ' ';
         this.denialcategoryvalue = this.DenailCategoryDatasource.filter(
-          (item) => item.Default === '1',
-        ).map((item) => item.ID);
+          (item: any) => item.Default === '1',
+        ).map((item: any) => item.ID);
         this.encountertypevalue = this.EncountrTypeDatasource.filter(
-          (item) => item.Default === '1',
-        ).map((item) => item.ID);
+          (item: any) => item.Default === '1',
+        ).map((item: any) => item.ID);
         this.facilityvalue = this.FacilityDataSource.filter(
-          (item) => item.Default === '1',
-        ).map((item) => item.ID);
+          (item: any) => item.Default === '1',
+        ).map((item: any) => item.ID);
         this.insuranceValue = this.insuranceDataSource
-          .filter((item) => item.Default === '1')
-          .map((item) => item.ID);
+          .filter((item: any) => item.Default === '1')
+          .map((item: any) => item.ID);
         this.departmentValue = this.departmentDataSource
-          .filter((item) => item.Default === '1')
-          .map((item) => item.ID);
+          .filter((item: any) => item.Default === '1')
+          .map((item: any) => item.ID);
       }
       this.get_graph_DataSource(1);
     });
@@ -774,7 +778,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
           this.RejectionAccountabilityDataSource = response.AccountabilityWise;
 
           this.ToptenInsuranceRejectedDataSource = response.InsuranceWise.map(
-            (insurance) => {
+            (insurance: any) => {
               if (!insurance.InsuranceShortName) {
                 const nameParts = insurance.InsuranceName.split(' ');
                 const shortName = nameParts.slice(0, 2).join(' ');
@@ -788,7 +792,7 @@ export class RevenueDashboardPageComponent implements OnInit, OnDestroy {
           this.TopTenCodeRejectedDataSource = response.CodeWise;
           this.TopTenDepartmentWiseRejectedDataSource = response.DepartmentWise;
           this.TopTenDoctorWiseRejectedDataSource = response.ClinicianWise.map(
-            (clinician) => {
+            (clinician: any) => {
               if (!clinician.ClinicianShortName && clinician.ClinicianName) {
                 const nameParts = clinician.ClinicianName.trim().split(/\s+/);
                 clinician.ClinicianShortName = nameParts.slice(0, 2).join(' ');
